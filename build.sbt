@@ -54,9 +54,9 @@ libraryDependencies += "com.github.ghostdogpr"        %% "caliban"         % "0.
 libraryDependencies += "com.github.ghostdogpr"        %% "caliban-http4s"  % "0.2.0"
 libraryDependencies += "com.github.pureconfig"        %% "pureconfig"      % "0.12.1"
 libraryDependencies += "com.github.pureconfig"        %% "pureconfig-yaml" % "0.12.1"
-libraryDependencies += "dev.zio"                      %% "zio"             % "1.0.0-RC16"
-libraryDependencies += "dev.zio"                      %% "zio-test"        % "1.0.0-RC16" % "test"
-libraryDependencies += "dev.zio"                      %% "zio-test-sbt"    % "1.0.0-RC16" % "test"
+libraryDependencies += "dev.zio"                      %% "zio"             % "1.0.0-RC17"
+libraryDependencies += "dev.zio"                      %% "zio-test"        % "1.0.0-RC17" % "test"
+libraryDependencies += "dev.zio"                      %% "zio-test-sbt"    % "1.0.0-RC17" % "test"
 
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3"
 

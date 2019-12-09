@@ -30,7 +30,7 @@ object Routes extends Http4sDsl[AppTask] {
   private def getResourceFile(fileName: String) =
     ZIO.runtime[AppEnv] >>= { implicit env =>
       StaticFile
-        .fromResource(fileName, Blocker liftExecutionContext env.Platform.executor.asEC, None)
+        .fromResource(fileName, Blocker liftExecutionContext env.platform.executor.asEC, None)
         .getOrElseF(NotFound())
     }
 
