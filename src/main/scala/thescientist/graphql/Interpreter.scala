@@ -4,7 +4,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter._
 
 import caliban.GraphQL.graphQL
-import caliban.ResponseValue.StringValue
+import caliban.Value.StringValue
 import caliban.schema.{ GenericSchema, Schema }
 import caliban.{ GraphQL, RootResolver }
 import thescientist.Data
@@ -14,7 +14,7 @@ import zio.ZIO
 
 object Interpreter extends GenericSchema[AppEnv] {
 
-  type AppInterpreter = GraphQL[AppEnv, Queries, Nothing, Nothing]
+  type AppInterpreter = GraphQL[AppEnv, Queries, Nothing, Nothing, Throwable]
 
   // custom LocalDateTime schema typeclass instance
   implicit val localDateTimeSchema: Schema.Typeclass[LocalDateTime] =
