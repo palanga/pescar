@@ -254,21 +254,8 @@ object TestMain
           val query =
             """
               |{
-              |  metrics(title: "langostinos") {
+              |  metrics(titleContains: "langostinos") {
               |    title
-              |    data {
-              |      __typename
-              |      ... on Histogram {
-              |         values {
-              |           month
-              |           value
-              |         }
-              |       }
-              |      ... on KPI {
-              |        value
-              |      }
-              |    }
-              |
               |  }
               |}
               |""".stripMargin
@@ -277,18 +264,59 @@ object TestMain
             json"""{
               "data": {
                 "metrics": [
-                  {
-                    "title": "Desembarques de langostinos por mes",
-                    "data": {
-                      "__typename": "Histogram",
-                      "values": [
-                        { "month": "January", "value": 190 },
-                        { "month": "February", "value": 23 },
-                        { "month": "March", "value": 347 },
-                        { "month": "April", "value": 1234 }
-                      ]
-                    }
-                  }
+                  { "title": "Desembarques de langostinos por mes" }
+                ]
+              },
+              "errors": []
+            }"""
+
+          query.runAsJson map (assert(_, equalTo(expected)))
+
+        },
+        testM("Query filtering by title, multiple words") {
+
+          val query =
+            """
+              |{
+              |  metrics(titleContains: ["langostinos", "pejerrey"]) {
+              |    title
+              |  }
+              |}
+              |""".stripMargin
+
+          val expected =
+            json"""{
+              "data": {
+                "metrics": [
+                  { "title": "Desembarques de langostinos por mes" },
+                  { "title": "Desembarques de pejerrey por mes" }
+                ]
+              },
+              "errors": []
+            }"""
+
+          query.runAsJson map (assert(_, equalTo(expected)))
+
+        },
+        testM("Query filtering by title by an empty string should return all") {
+
+          val query =
+            """
+              |{
+              |  metrics(titleContains: "") {
+              |    title
+              |  }
+              |}
+              |""".stripMargin
+
+          val expected =
+            json"""{
+              "data": {
+                "metrics": [
+                  { "title": "Desembarques de langostinos por mes" },
+                  { "title": "Desembarques de merluza por mes" },
+                  { "title": "Desembarques de pejerrey por mes" },
+                  { "title": "Desembarques de pulpo por mes" }
                 ]
               },
               "errors": []

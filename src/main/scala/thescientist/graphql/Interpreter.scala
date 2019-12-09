@@ -9,6 +9,7 @@ import caliban.schema.{ GenericSchema, Schema }
 import caliban.{ GraphQL, RootResolver }
 import thescientist.Data
 import thescientist.Main.AppEnv
+import thescientist.Types.{ Metric, MetricTitle }
 import thescientist.graphql.Types.Queries
 import zio.ZIO
 
@@ -23,9 +24,12 @@ object Interpreter extends GenericSchema[AppEnv] {
   def apply: AppInterpreter = graphQL(
     RootResolver(
       Queries(
-        args => ZIO succeed Data.metrics.filter(metric => metric.title.contains(args.title.getOrElse(metric.title))),
+        args => ZIO succeed args.titleContains.fold(Data.metrics)(byTitle(Data.metrics)),
       ),
     )
   )
+
+  private def byTitle(metrics: List[Metric])(titleWords: List[MetricTitle]): List[Metric] =
+    metrics.filter(metric => titleWords exists metric.title.contains)
 
 }
