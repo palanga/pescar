@@ -6,7 +6,7 @@ import zio.UIO
 
 object Types {
 
-  case class MetricsArgs(titleContains: Option[List[MetricTitle]])
+  case class MetricsArgs(keywords: Option[List[MetricTitle]])
 
   case class Queries(
     @GQLDescription("Return all metrics")

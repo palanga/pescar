@@ -1,4 +1,4 @@
-package thescientist
+package thescientist.persistence
 
 import thescientist.Types._
 

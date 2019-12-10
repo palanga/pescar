@@ -254,7 +254,7 @@ object TestMain
           val query =
             """
               |{
-              |  metrics(titleContains: "langostinos") {
+              |  metrics(keywords: "langostinos") {
               |    title
               |  }
               |}
@@ -278,7 +278,7 @@ object TestMain
           val query =
             """
               |{
-              |  metrics(titleContains: ["langostinos", "pejerrey"]) {
+              |  metrics(keywords: ["langostinos", "pejerrey"]) {
               |    title
               |  }
               |}
@@ -303,7 +303,7 @@ object TestMain
           val query =
             """
               |{
-              |  metrics(titleContains: "") {
+              |  metrics(keywords: "") {
               |    title
               |  }
               |}
