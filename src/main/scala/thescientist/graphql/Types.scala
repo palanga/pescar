@@ -2,7 +2,8 @@ package thescientist.graphql
 
 import caliban.schema.Annotations.GQLDescription
 import thescientist.Types.{ Metric, MetricTitle }
-import zio.UIO
+import thescientist.metrics.Metrics
+import zio.URIO
 
 object Types {
 
@@ -10,7 +11,7 @@ object Types {
 
   case class Queries(
     @GQLDescription("Return all metrics")
-    metrics: MetricsArgs => UIO[List[Metric]],
+    metrics: MetricsArgs => URIO[Metrics, List[Metric]],
   )
 
 }

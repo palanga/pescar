@@ -8,10 +8,18 @@ trait Metrics {
 }
 
 object Metrics {
+
   trait Service[R] {
     def all: ZIO[R, Nothing, List[Metric]]
     def filterByTitle(keywords: List[String]): ZIO[R, Nothing, List[Metric]]
   }
+
+  object > extends Metrics.Service[Metrics] {
+    override def all: ZIO[Metrics, Nothing, List[Metric]] = ZIO accessM (_.metrics.all)
+    override def filterByTitle(keywords: List[String]): ZIO[Metrics, Nothing, List[Metric]] =
+      ZIO accessM (_.metrics filterByTitle keywords)
+  }
+
 }
 
 trait MetricsMock extends Metrics {

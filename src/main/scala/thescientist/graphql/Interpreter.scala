@@ -9,7 +9,7 @@ import caliban.schema.{ GenericSchema, Schema }
 import caliban.{ GraphQL, RootResolver }
 import thescientist.Main.AppEnv
 import thescientist.graphql.Types.Queries
-import thescientist.metrics.MetricsMock.metrics
+import thescientist.metrics.Metrics
 
 object Interpreter extends GenericSchema[AppEnv] {
 
@@ -22,7 +22,7 @@ object Interpreter extends GenericSchema[AppEnv] {
   def apply: AppInterpreter = graphQL(
     RootResolver(
       Queries(
-        _.keywords.fold(metrics.all)(metrics.filterByTitle),
+        _.keywords.fold(Metrics.>.all)(Metrics.>.filterByTitle),
       ),
     )
   )

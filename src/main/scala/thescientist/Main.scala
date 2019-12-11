@@ -2,16 +2,25 @@ package thescientist
 
 import org.http4s.server.blaze.BlazeServerBuilder
 import thescientist.graphql.Interpreter
+import thescientist.metrics.{ Metrics, MetricsMock }
+import zio.clock.Clock
 import zio.interop.catz._
 import zio.{ App, RIO, ZEnv, ZIO }
 
 object Main extends App {
 
-  type AppEnv     = ZEnv
+  trait BaseEnv extends Clock
+
+  type AppEnv     = BaseEnv with Metrics
   type AppTask[A] = RIO[AppEnv, A]
 
-  override def run(args: List[String]): ZIO[AppEnv, Nothing, Int] =
-    makeServer.orDie map (_ => 0)
+  override def run(args: List[String]): ZIO[ZEnv, Nothing, Int] =
+    (makeServer.orDie map (_ => 0)).provideSome[ZEnv](
+      env =>
+        new MetricsMock with BaseEnv {
+          override val clock = env.clock
+      }
+    )
 
   val httpApp = Routes all Interpreter.apply
 

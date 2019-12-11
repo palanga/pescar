@@ -1,7 +1,9 @@
 package thescientist
 
 import io.circe.literal._
+import thescientist.metrics.MetricsMock
 import thescientist.syntax.gqlquery._
+import zio.{ ZEnv, ZIO }
 import zio.test.Assertion._
 import zio.test._
 
@@ -325,5 +327,19 @@ object TestMain
           query.runAsJson map (assert(_, equalTo(expected)))
 
         },
-      )
+      ).provideSomeManaged(Helper.MockEnv)
     )
+
+object Helper {
+
+  val MockEnv = ZIO
+    .environment[ZEnv]
+    .toManaged(_ => ZIO.unit)
+    .map(
+      env =>
+        new MetricsMock with Main.BaseEnv {
+          override val clock = env.clock
+      }
+    )
+
+}
