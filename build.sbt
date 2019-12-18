@@ -58,6 +58,11 @@ libraryDependencies += "dev.zio"                      %% "zio"             % "1.
 libraryDependencies += "dev.zio"                      %% "zio-test"        % "1.0.0-RC17" % "test"
 libraryDependencies += "dev.zio"                      %% "zio-test-sbt"    % "1.0.0-RC17" % "test"
 
+// gob_api_consumer dependencies
+libraryDependencies += "com.softwaremill.sttp.client" %% "async-http-client-backend-zio" % "2.0.0-RC5"
+libraryDependencies += "com.softwaremill.sttp.client" %% "circe"                         % "2.0.0-RC5"
+libraryDependencies += "com.softwaremill.sttp.client" %% "core"                          % "2.0.0-RC5"
+
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3"
 
 testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
