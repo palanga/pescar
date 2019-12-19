@@ -62,6 +62,9 @@ libraryDependencies += "dev.zio"                      %% "zio-test-sbt"    % "1.
 libraryDependencies += "com.softwaremill.sttp.client" %% "async-http-client-backend-zio" % "2.0.0-RC5"
 libraryDependencies += "com.softwaremill.sttp.client" %% "circe"                         % "2.0.0-RC5"
 libraryDependencies += "com.softwaremill.sttp.client" %% "core"                          % "2.0.0-RC5"
+libraryDependencies += "org.tpolecat"                 %% "doobie-core"                   % "0.8.6"
+libraryDependencies += "org.tpolecat"                 %% "doobie-hikari"                 % "0.8.6"
+libraryDependencies += "org.tpolecat"                 %% "doobie-postgres"               % "0.8.6"
 
 libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.2.3"
 
