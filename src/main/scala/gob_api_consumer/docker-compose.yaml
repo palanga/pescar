@@ -4,10 +4,15 @@ networks:
   net:
     driver: bridge
 
+volumes:
+  db-data:
+
 services:
   postgres:
     container_name: datos-gob-postgres
     image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
     networks:
       - net
     ports:

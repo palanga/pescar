@@ -1,6 +1,6 @@
 package gob_api_consumer
 
-object Types {
+object types {
 
   case class RequestBody(
     limit: Int,
@@ -25,6 +25,7 @@ object Types {
 
   type URL = String
 
+  // TODO reorder fields
   case class Record(
     captura: Int,
     categoria: String,

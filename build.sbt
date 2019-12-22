@@ -14,7 +14,7 @@ scalacOptions ++= Seq(
   "-language:higherKinds",         // Allow higher-kinded types
   "-language:implicitConversions", // Allow definition of implicit functions called views
   "-unchecked",                    // Enable additional warnings where generated code depends on assumptions.
-  "-Xcheckinit",                   // Wrap field accessors to throw an exception on uninitialized access.
+//  "-Xcheckinit",                   // Wrap field accessors to throw an exception on uninitialized access.
 //  "-Xfatal-warnings",              // Fail the compilation if there are any warnings.
   "-Xlint:adapted-args",           // Warn if an argument list is modified to match the receiver.
   "-Xlint:constant",               // Evaluation of a constant arithmetic expression results in an error.
@@ -55,10 +55,15 @@ libraryDependencies += "com.github.ghostdogpr"        %% "caliban-http4s"  % "0.
 libraryDependencies += "com.github.pureconfig"        %% "pureconfig"      % "0.12.1"
 libraryDependencies += "com.github.pureconfig"        %% "pureconfig-yaml" % "0.12.1"
 libraryDependencies += "dev.zio"                      %% "zio"             % "1.0.0-RC17"
+libraryDependencies += "dev.zio"                      %% "zio-streams"     % "1.0.0-RC17"
 libraryDependencies += "dev.zio"                      %% "zio-test"        % "1.0.0-RC17" % "test"
 libraryDependencies += "dev.zio"                      %% "zio-test-sbt"    % "1.0.0-RC17" % "test"
 
 // gob_api_consumer dependencies
+
+libraryDependencies += "org.http4s" %% "http4s-dsl"          % "0.21.0-M6"
+libraryDependencies += "org.http4s" %% "http4s-blaze-client" % "0.21.0-M6"
+
 libraryDependencies += "com.softwaremill.sttp.client" %% "async-http-client-backend-zio" % "2.0.0-RC5"
 libraryDependencies += "com.softwaremill.sttp.client" %% "circe"                         % "2.0.0-RC5"
 libraryDependencies += "com.softwaremill.sttp.client" %% "core"                          % "2.0.0-RC5"

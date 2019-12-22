@@ -1,9 +1,6 @@
-DROP DATABASE IF EXISTS postgres;
-
-CREATE DATABASE postgres;
-
 DROP TABLE IF EXISTS records;
 
+-- TODO reorder fields
 CREATE TABLE records
 (
     captura          INT     NOT NULL,

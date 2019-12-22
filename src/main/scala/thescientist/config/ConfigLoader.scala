@@ -6,9 +6,23 @@ import java.nio.file.{ Path, Paths }
 import pureconfig.ConfigReader
 import pureconfig.generic.auto._
 import pureconfig.module.yaml._
-import zio.{ Task, ZIO }
+import zio.{ Task, UIO, ZIO }
 
 object ConfigLoader {
+
+  val default: UIO[Config] = ZIO succeed Config(
+    DBConfig(
+      "org.postgresql.Driver",
+      "jdbc:postgresql://postgres:5432/postgres",
+      "postgres",
+      "postgres",
+      32
+    ),
+    ServerConfig(
+      "",
+      0
+    )
+  )
 
   final val loadYamlConfig: Task[Config] = resourcePath("/conf.yaml") >>= loadYamlFromPath[Config]
 
