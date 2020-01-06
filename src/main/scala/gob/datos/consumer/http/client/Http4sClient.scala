@@ -1,7 +1,7 @@
-package gob_api_consumer.http.client
+package gob.datos.consumer.http.client
 
-import gob_api_consumer.types.ResponseBody
-import gob_api_consumer.http.client.types.{ BlockingIO, Request, UnsuccessfulResponse }
+import gob.datos.consumer.http.client.types.{ BlockingIO, Request, UnsuccessfulResponse }
+import gob.datos.consumer.types.ResponseBody
 import org.http4s.client.Client
 import org.http4s.client.blaze.BlazeClientBuilder
 import org.http4s.{ Method, Response, Request => Http4sRequest }

@@ -1,7 +1,7 @@
-package gob_api_consumer.http.client
+package gob.datos.consumer.http.client
 
-import gob_api_consumer.types.ResponseBody
-import gob_api_consumer.http.client.types.Request
+import gob.datos.consumer.http.client.types.Request
+import gob.datos.consumer.types.ResponseBody
 import zio.ZIO
 import zio.blocking.Blocking
 

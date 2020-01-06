@@ -1,4 +1,4 @@
-package gob_api_consumer
+package gob.datos.consumer
 
 import doobie.hikari.HikariTransactor
 import thescientist.config.DBConfig

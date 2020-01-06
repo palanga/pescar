@@ -1,7 +1,7 @@
-package gob_api_consumer.http.client
+package gob.datos.consumer.http.client
 
-import gob_api_consumer.http.client.types.{ DeserializationError, Request, UnsuccessfulResponse }
-import gob_api_consumer.{ types, Constants }
+import gob.datos.consumer.http.client.types.{ DeserializationError, Request, UnsuccessfulResponse }
+import gob.datos.consumer.{ Constants, types }
 import sttp.client.SttpBackend
 import sttp.client.asynchttpclient.WebSocketHandler
 import sttp.client.asynchttpclient.zio.AsyncHttpClientZioBackend

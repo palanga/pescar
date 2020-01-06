@@ -1,6 +1,7 @@
-package gob_api_consumer
+package gob.datos.consumer
 
-import gob_api_consumer.http.client.HttpClient
+import gob.datos.consumer.http.client
+import gob.datos.consumer.http.client.HttpClient
 import zio.blocking.Blocking
 import zio.console.Console
 import zio.stream.ZStream
@@ -17,7 +18,7 @@ object Main extends App {
 
   private val app = {
 
-    import util.zio_syntax._
+    import gob.datos.consumer.util.zio_syntax._
 
     val INITIAL_OFFSET = 2889
     val PAGE_SIZE      = 10
@@ -54,7 +55,7 @@ object Main extends App {
   }
 
   private def makeRequest(resourceId: types.ResourceId)(pageSize: Int)(offset: Int) =
-    http.client.types.Request(
+    client.types.Request(
       Constants.Url.DATOS_AGROINDUSTRIA_GOB_AR,
       types.RequestBody(pageSize, offset, resourceId),
     )

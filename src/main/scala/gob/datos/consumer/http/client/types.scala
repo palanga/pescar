@@ -1,6 +1,6 @@
-package gob_api_consumer.http.client
+package gob.datos.consumer.http.client
 
-import gob_api_consumer.types.RequestBody
+import gob.datos.consumer.types.RequestBody
 import zio.RIO
 import zio.blocking.Blocking
 

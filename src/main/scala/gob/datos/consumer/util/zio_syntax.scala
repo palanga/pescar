@@ -1,4 +1,4 @@
-package gob_api_consumer.util
+package gob.datos.consumer.util
 
 import zio.ZIO
 import zio.stream.ZStream
