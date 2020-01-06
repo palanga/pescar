@@ -25,21 +25,20 @@ object types {
 
   type URL = String
 
-  // TODO reorder fields
   case class Record(
-    captura: Int,
-    categoria: String,
-    departamento: String,
-    departamento_id: Int,
-    especie: String,
-    especie_agrupada: String,
     fecha: String,
     flota: String,
-    latitud: Option[Degree],
-    longitud: Option[Degree],
+    puerto: String,
     provincia: String,
     provincia_id: Int,
-    puerto: String,
+    departamento: String,
+    departamento_id: Int,
+    latitud: Option[Degree],
+    longitud: Option[Degree],
+    categoria: String,
+    especie: String,
+    especie_agrupada: String,
+    captura: Int,
   )
 
   type Degree = Float
