@@ -1,6 +1,5 @@
 DROP TABLE IF EXISTS records;
 
--- TODO make primary key
 CREATE TABLE records
 (
     fecha            VARCHAR NOT NULL,
@@ -15,5 +14,7 @@ CREATE TABLE records
     categoria        VARCHAR NOT NULL,
     especie          VARCHAR NOT NULL,
     especie_agrupada VARCHAR NOT NULL,
-    captura          INT     NOT NULL
+    captura          INT     NOT NULL,
+    created_at       TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (fecha, flota, puerto, provincia_id, departamento_id, categoria, especie, especie_agrupada)
 );
