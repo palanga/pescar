@@ -21,28 +21,17 @@ trait DoobieRecordPersistence extends RecordPersistence {
       import doobie.implicits._
       import zio.interop.catz._
 
-      val sql = "INSERT INTO records VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+      val sql = "INSERT INTO landings VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
       Update[Record](sql)
         .updateMany(records.toList)
         .transact(transactor)
-        .mapError(t => PersistenceError(records, t))
-        .flatMap(
+        .mapError(t => PersistenceError(records, t)) // TODO shit
+        .flatMap( // TODO use ZIO.when ?
           updatedCount =>
             if (updatedCount == records.size) ZIO.succeed(records)
-            else ZIO.fail(SomeRecordsNotInserted(records, updatedCount))
+            else ZIO.fail(SomeRecordsNotInserted(records, updatedCount)) // TODO ditto
         )
-
-    }
-
-    override def deleteRecords = {
-
-      import doobie.implicits._
-      import zio.interop.catz._
-
-      sql"DELETE FROM records".update.run
-        .transact(transactor)
-        .unit
 
     }
 
@@ -54,7 +43,7 @@ object DoobieRecordPersistence {
 
   import cats.effect.Blocker
   import doobie.hikari.HikariTransactor
-  import thescientist.config.DBConfig
+  import config.DBConfig
   import zio.ZIO
   import zio.blocking.Blocking
   import zio.interop.catz._

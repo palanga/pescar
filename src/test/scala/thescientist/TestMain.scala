@@ -3,13 +3,14 @@ package thescientist
 import io.circe.literal._
 import thescientist.metrics.MetricsMock
 import thescientist.syntax.gqlquery._
-import zio.{ ZEnv, ZIO }
-import zio.test.Assertion._
-import zio.test._
+import zio.ZManaged
+import zio.clock.Clock
+import zio.test.Assertion.equalTo
+import zio.test.{ assert, suite, testM, DefaultRunnableSpec }
 
 object TestMain
     extends DefaultRunnableSpec(
-      suite("Main")(
+      suite("metrics.graphql")(
         testM("Query title") {
 
           val query =
@@ -327,19 +328,19 @@ object TestMain
           query.runAsJson map (assert(_, equalTo(expected)))
 
         },
-      ).provideSomeManaged(Helper.MockEnv)
+      ).provideSomeManaged(helper.dependencies)
     )
 
-object Helper {
+object helper {
 
-  val MockEnv = ZIO
-    .environment[ZEnv]
-    .toManaged(_ => ZIO.unit)
-    .map(
-      env =>
-        new MetricsMock with Main.BaseEnv {
-          override val clock = env.clock
-      }
-    )
+  val dependencies =
+    ZManaged
+      .environment[Clock]
+      .map(
+        env =>
+          new MetricsMock with Main.BaseEnv {
+            override val clock = env.clock
+        }
+      )
 
 }

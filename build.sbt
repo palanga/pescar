@@ -46,10 +46,6 @@ scalacOptions ++= Seq(
 
 //scalacOptions += "-Ylog-classpath"
 
-libraryDependencies += "io.circe"                     %% "circe-core"      % "0.12.3"
-libraryDependencies += "io.circe"                     %% "circe-generic"   % "0.12.3"
-libraryDependencies += "io.circe"                     %% "circe-literal"   % "0.12.3"
-libraryDependencies += "io.circe"                     %% "circe-parser"    % "0.12.3"
 libraryDependencies += "com.github.ghostdogpr"        %% "caliban"         % "0.3.1"
 libraryDependencies += "com.github.ghostdogpr"        %% "caliban-http4s"  % "0.3.1"
 libraryDependencies += "com.github.pureconfig"        %% "pureconfig"      % "0.12.1"
@@ -58,15 +54,18 @@ libraryDependencies += "dev.zio"                      %% "zio"             % "1.
 libraryDependencies += "dev.zio"                      %% "zio-streams"     % "1.0.0-RC17"
 libraryDependencies += "dev.zio"                      %% "zio-test"        % "1.0.0-RC17" % "test"
 libraryDependencies += "dev.zio"                      %% "zio-test-sbt"    % "1.0.0-RC17" % "test"
+libraryDependencies += "io.circe"                     %% "circe-core"      % "0.12.3"
+libraryDependencies += "io.circe"                     %% "circe-generic"   % "0.12.3"
+libraryDependencies += "io.circe"                     %% "circe-literal"   % "0.12.3"
+libraryDependencies += "io.circe"                     %% "circe-parser"    % "0.12.3"
 
 // gob_api_consumer dependencies
-
-libraryDependencies += "org.http4s" %% "http4s-dsl"          % "0.21.0-M6"
-libraryDependencies += "org.http4s" %% "http4s-blaze-client" % "0.21.0-M6"
-
 libraryDependencies += "com.softwaremill.sttp.client" %% "async-http-client-backend-zio" % "2.0.0-RC5"
 libraryDependencies += "com.softwaremill.sttp.client" %% "circe"                         % "2.0.0-RC5"
 libraryDependencies += "com.softwaremill.sttp.client" %% "core"                          % "2.0.0-RC5"
+libraryDependencies += "dev.zio"                      %% "zio-nio"                       % "0.4.0"
+libraryDependencies += "org.http4s"                   %% "http4s-blaze-client"           % "0.21.0-M6"
+libraryDependencies += "org.http4s"                   %% "http4s-dsl"                    % "0.21.0-M6"
 libraryDependencies += "org.tpolecat"                 %% "doobie-core"                   % "0.8.6"
 libraryDependencies += "org.tpolecat"                 %% "doobie-hikari"                 % "0.8.6"
 libraryDependencies += "org.tpolecat"                 %% "doobie-postgres"               % "0.8.6"

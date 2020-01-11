@@ -1,6 +1,6 @@
-package thescientist
+package config
 
-package object config {
+object types {
 
   type DriverName     = String
   type URL            = String

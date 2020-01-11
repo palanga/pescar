@@ -1,4 +1,6 @@
-package thescientist.config
+package config
+
+import config.types._
 
 case class Config(db: DBConfig, server: ServerConfig)
 

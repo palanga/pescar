@@ -1,4 +1,4 @@
-package thescientist.config
+package config
 
 import java.net.URLDecoder
 import java.nio.file.{ Path, Paths }
@@ -10,12 +10,12 @@ import zio.{ Task, UIO, ZIO }
 
 object ConfigLoader {
 
-  val default: UIO[Config] = ZIO succeed Config(
+  val test: UIO[Config] = ZIO succeed Config(
     DBConfig(
       "org.postgresql.Driver",
-      "jdbc:postgresql://postgres:5432/postgres",
-      "postgres",
-      "postgres",
+      "jdbc:postgresql://postgres:5432/test_datos_gob",
+      "palan",
+      "",
       32
     ),
     ServerConfig(

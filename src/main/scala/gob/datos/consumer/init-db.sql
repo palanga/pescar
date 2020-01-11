@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS records;
+DROP TABLE IF EXISTS landings;
 
-CREATE TABLE records
+CREATE TABLE landings
 (
     fecha            VARCHAR NOT NULL,
     flota            VARCHAR NOT NULL,
