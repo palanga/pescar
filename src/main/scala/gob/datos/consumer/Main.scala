@@ -2,26 +2,26 @@ package gob.datos.consumer
 
 import gob.datos.consumer.http.client
 import gob.datos.consumer.http.client.HttpClient
+import gob.datos.consumer.persistence.record.RecordPersistence
 import zio.blocking.Blocking
 import zio.console.Console
 import zio.stream.ZStream
-import zio.{ App, ZEnv, ZIO }
+import zio.{ App, ZEnv, ZIO, ZManaged }
 
 object Main extends App {
 
   override def run(args: List[String]): ZIO[ZEnv, Nothing, Int] =
-    app
-      .provideSomeManaged(dependencies)
-      .runDrain
+    app.runDrain
       .as(ExitStatus.Success)
+      .provideSomeManaged(dependencies)
       .orDie
 
   private val app = {
 
     import gob.datos.consumer.util.zio_syntax._
 
-    val INITIAL_OFFSET = 2889
-    val PAGE_SIZE      = 10
+    val INITIAL_OFFSET = 0
+    val PAGE_SIZE      = 100
 
     ZStream
       .iterate(INITIAL_OFFSET)(_ + PAGE_SIZE)
@@ -30,28 +30,9 @@ object Main extends App {
       .map(_.result.records)
       .takeWhile(_.nonEmpty)
       .buffer(8)
-      .mapM(records => zio.console.putStrLn(records.mkString("\n")))
+      .mapM(RecordPersistence.module.saveMany)
+      .tap(records => zio.console.putStrLn("Records saved:\n" ++ records.mkString("\n")))
 
-  }
-
-  private val dependencies =
-    ZIO.environment[Blocking with Console].toManaged_ >>= { env =>
-      for {
-        //        config       <- ConfigLoader.default.toManaged_
-        //        transactor   <- Transactor.fromConfig(config.db)
-        //        http4sClient <- http.Http4sClient.makeManaged
-        sttpClient <- http.client.SttpClient.makeManaged
-      } yield {
-        new Blocking with Console with HttpClient {
-          override val blocking   = env.blocking
-          override val console    = env.console
-          override val httpClient = sttpClient.httpClient
-        }
-      }
-    }
-
-  object ExitStatus {
-    val Success = 0
   }
 
   private def makeRequest(resourceId: types.ResourceId)(pageSize: Int)(offset: Int) =
@@ -59,5 +40,25 @@ object Main extends App {
       Constants.Url.DATOS_AGROINDUSTRIA_GOB_AR,
       types.RequestBody(pageSize, offset, resourceId),
     )
+
+  object ExitStatus {
+    val Success = 0
+  }
+
+  // TODO maybe we can use some other combinators to compose dependencies
+  private val dependencies =
+    for {
+      env    <- ZManaged.environment[Blocking with Console]
+      config <- thescientist.config.ConfigLoader.default.toManaged_
+      sttp   <- http.client.SttpClient.makeManaged
+      doobie <- persistence.record.DoobieRecordPersistence.makeManaged(config.db)
+    } yield {
+      new Blocking with Console with HttpClient with RecordPersistence {
+        override val blocking          = env.blocking
+        override val console           = env.console
+        override val httpClient        = sttp.httpClient
+        override val recordPersistence = doobie.recordPersistence
+      }
+    }
 
 }
