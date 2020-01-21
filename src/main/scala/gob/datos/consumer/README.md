@@ -1,7 +1,7 @@
- gob-api-consumer
+ gob.datos.consumer
  ================
  
- Consume los datos de datos.gob.ar o algo asi y los guarda en un postgres crudo
+Consume landings data from datos.gob.ar and store them raw in our database.
  
  Prerequisites
  =============

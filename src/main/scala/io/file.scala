@@ -70,7 +70,7 @@ object file {
   private val OneMegaByteL = OneMegaByte.toLong
   private def asStringStream(channel: AsynchronousFileChannel) =
     Stream
-      .iterate(0L)(_ + OneMegaByteL) // TODO paginate ?
+      .iterate(0L)(_ + OneMegaByteL)
       .mapM(channel.read(OneMegaByte, _))
       .takeUntil(_.isEmpty)
       .aggregate(Sink.utf8DecodeChunk)

@@ -11,6 +11,9 @@ import zio.{ App, ZEnv, ZIO, ZManaged }
 
 object Main extends App {
 
+  /**
+   * Consume landings data from datos.gob.ar and store them raw in our database.
+   */
   override def run(args: List[String]): ZIO[ZEnv, Nothing, Int] =
     loadDataFromCsv
       .flatMap(LandingsDatabase.module.saveMany)
