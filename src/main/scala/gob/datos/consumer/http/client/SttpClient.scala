@@ -1,7 +1,7 @@
 package gob.datos.consumer.http.client
 
 import gob.datos.consumer.http.client.types.{ DeserializationError, Request, UnsuccessfulResponse }
-import gob.datos.consumer.{ Constants, types }
+import gob.datos.consumer.{ constants, types }
 import sttp.client.SttpBackend
 import sttp.client.asynchttpclient.WebSocketHandler
 import sttp.client.asynchttpclient.zio.AsyncHttpClientZioBackend
@@ -28,7 +28,7 @@ trait SttpClient extends HttpClient {
       }
 
       basicRequest
-        .post(uri"${Constants.Url.DATOS_AGROINDUSTRIA_GOB_AR}")
+        .post(uri"${constants.Url.DATOS_AGROINDUSTRIA_GOB_AR}")
         .body(types.RequestBody(request.body.limit, request.body.offset, request.body.resource_id))
         .response(asJson[types.ResponseBody])
         .send()

@@ -1,21 +1,21 @@
-package gob.datos.consumer.persistence.record
+package gob.datos.consumer.database.landing
 
 import doobie.util.transactor.Transactor
 import doobie.util.update.Update
-import gob.datos.consumer.persistence.record.types.{ BlockingIO, PersistenceError, SomeRecordsNotInserted }
-import gob.datos.consumer.types.Record
+import types.{ BlockingIO, DatabaseError, SomeLandingsNotInserted }
+import gob.datos.consumer.types.Landing
 import zio.ZIO
 import zio.blocking.Blocking
 
-trait DoobieRecordPersistence extends RecordPersistence {
+trait DoobieLandingsDatabase extends LandingsDatabase {
 
   protected val transactor: Transactor[BlockingIO]
 
-  override val recordPersistence = new RecordPersistence.Service[Blocking] {
+  override val landingsDatabase = new LandingsDatabase.Service[Blocking] {
 
-    override def save(record: Record) = ???
+    override def save(landing: Landing) = ???
 
-    override def saveMany(records: Iterable[Record]) = {
+    override def saveMany(landings: Iterable[Landing]) = {
 
       import cats.implicits._
       import doobie.implicits._
@@ -23,14 +23,14 @@ trait DoobieRecordPersistence extends RecordPersistence {
 
       val sql = "INSERT INTO landings VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
-      Update[Record](sql)
-        .updateMany(records.toList)
+      Update[Landing](sql)
+        .updateMany(landings.toList)
         .transact(transactor)
-        .mapError(t => PersistenceError(records, t)) // TODO shit
+        .mapError(t => DatabaseError(landings, t)) // TODO shit
         .flatMap( // TODO use ZIO.when ?
           updatedCount =>
-            if (updatedCount == records.size) ZIO.succeed(records)
-            else ZIO.fail(SomeRecordsNotInserted(records, updatedCount)) // TODO ditto
+            if (updatedCount == landings.size) ZIO.succeed(landings)
+            else ZIO.fail(SomeLandingsNotInserted(landings, updatedCount)) // TODO shit
         )
 
     }
@@ -39,7 +39,7 @@ trait DoobieRecordPersistence extends RecordPersistence {
 
 }
 
-object DoobieRecordPersistence {
+object DoobieLandingsDatabase {
 
   import cats.effect.Blocker
   import doobie.hikari.HikariTransactor
@@ -63,7 +63,7 @@ object DoobieRecordPersistence {
                              )
                              .toManaged
       } yield {
-        new DoobieRecordPersistence {
+        new DoobieLandingsDatabase {
           override protected val transactor: Transactor[BlockingIO] = hikariTransactor
         }
       }

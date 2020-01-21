@@ -1,12 +1,7 @@
 package config
 
-import java.net.URLDecoder
-import java.nio.file.{ Path, Paths }
-
-import pureconfig.ConfigReader
-import pureconfig.generic.auto._
-import pureconfig.module.yaml._
-import zio.{ Task, UIO, ZIO }
+import pureconfig.module.yaml.YamlConfigSource
+import zio.{ UIO, ZIO }
 
 object ConfigLoader {
 
@@ -24,17 +19,13 @@ object ConfigLoader {
     )
   )
 
-  final val loadYamlConfig: Task[Config] = resourcePath("/conf.yaml") >>= loadYamlFromPath[Config]
+  final val loadYamlConfig = io.file.openResource("/conf.yaml") >>= loadYamlFromString
 
-  private final def resourcePath(path: String): Task[Path] =
+  private final def loadYamlFromString(confString: String) = {
+    import pureconfig.generic.auto._
     ZIO
-      .effect(this.getClass.getResource(path).getFile)
-      .map(URLDecoder.decode(_, "UTF-8"))
-      .map(Paths.get(_))
-
-  private final def loadYamlFromPath[T](path: Path)(implicit cr: ConfigReader[T]): Task[T] =
-    ZIO
-      .fromEither(YamlConfigSource.file(path).load[T])
-      .mapError(configReaderFailures => new Exception(configReaderFailures.toString))
+      .fromEither(YamlConfigSource.string(confString).load[Config])
+      .mapError(ConfigFailure.fromConfigReaderFailures)
+  }
 
 }

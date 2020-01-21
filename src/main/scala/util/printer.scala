@@ -31,7 +31,7 @@ object printer {
       case gob.datos.consumer.Main.Indexed(index, value) => s"Parse failure on line $index: ${value.show}"
     }
 
-    implicit val recordShow: Show[gob.datos.consumer.types.Record] = _.toString
+    implicit val landingShow: Show[gob.datos.consumer.types.Landing] = _.toString
 
   }
 

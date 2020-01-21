@@ -1,9 +1,9 @@
 package gob.datos.consumer
 
 import gob.datos.consumer.csv.parser
+import gob.datos.consumer.database.landing.{ DoobieLandingsDatabase, LandingsDatabase }
 import gob.datos.consumer.http.client
 import gob.datos.consumer.http.client.HttpClient
-import gob.datos.consumer.persistence.record.RecordPersistence
 import zio.blocking.Blocking
 import zio.console.Console
 import zio.stream.ZStream
@@ -13,9 +13,9 @@ object Main extends App {
 
   override def run(args: List[String]): ZIO[ZEnv, Nothing, Int] =
     loadDataFromCsv
-      .flatMap(RecordPersistence.module.saveMany)
-      .tap(savedRecords => zio.console.putStrLn("Records saved:\n" ++ savedRecords.mkString("\n")))
-      .tap(savedRecords => zio.console.putStrLn("Total: " ++ savedRecords.size.toString))
+      .flatMap(LandingsDatabase.module.saveMany)
+      .tap(savedLandings => zio.console.putStrLn("Landings saved:\n" ++ savedLandings.mkString("\n")))
+      .tap(savedLandings => zio.console.putStrLn("Total: " ++ savedLandings.size.toString))
       .as(ExitStatus.Success)
       .provideSomeManaged(dependencies)
       .orDie
@@ -40,10 +40,8 @@ object Main extends App {
         case (failures, _)   => Left(failures)
       }
 
-    // 5489330 bytes
-    // 41340 lines (excluding the header)
     io.file
-      .open("/Users/palan/Downloads/captura-puerto-flota-2010-2018-utf8.csv")
+      .list(constants.Path.CAPTURA_PUERTO_FLOTA_2010_2018)
       .map(_.drop(1)) // Drop the header
       .map(parse)
       .flatMap(ZIO.fromEither(_).mapError(ParseFailure))
@@ -76,7 +74,7 @@ object Main extends App {
     // TODO investigate ZStream.paginate
     ZStream
       .iterate(INITIAL_OFFSET)(_ + PAGE_SIZE)
-      .map(makeRequest(Constants.ResourceId.DESEMBARQUE_DE_CAPTURA_DE_ESPECIES_MARÍTIMAS_2019)(PAGE_SIZE))
+      .map(makeRequest(constants.ResourceId.DESEMBARQUE_DE_CAPTURA_DE_ESPECIES_MARÍTIMAS_2019)(PAGE_SIZE))
       .mapMPar_(4, HttpClient.module.fetch)
       .map(_.result.records)
       .takeWhile(_.nonEmpty)
@@ -87,7 +85,7 @@ object Main extends App {
 
   private def makeRequest(resourceId: types.ResourceId)(pageSize: Int)(offset: Int) =
     client.types.Request(
-      Constants.Url.DATOS_AGROINDUSTRIA_GOB_AR,
+      constants.Url.DATOS_AGROINDUSTRIA_GOB_AR,
       types.RequestBody(pageSize, offset, resourceId),
     )
 
@@ -95,19 +93,19 @@ object Main extends App {
     val Success = 0
   }
 
-  // TODO maybe we can use some other combinators to compose dependencies
+  // TODO investigate env combinators
   private val dependencies =
     for {
       env    <- ZManaged.environment[Blocking with Console]
-      config <- config.ConfigLoader.test.toManaged_
-      doobie <- persistence.record.DoobieRecordPersistence.makeManaged(config.db)
+      config <- config.ConfigLoader.loadYamlConfig.toManaged_
+      doobie <- DoobieLandingsDatabase.makeManaged(config.db)
       sttp   <- http.client.SttpClient.makeManaged
     } yield {
-      new Blocking with Console with HttpClient with RecordPersistence {
-        override val blocking          = env.blocking
-        override val console           = env.console
-        override val recordPersistence = doobie.recordPersistence
-        override val httpClient        = sttp.httpClient
+      new Blocking with Console with HttpClient with LandingsDatabase {
+        override val blocking         = env.blocking
+        override val console          = env.console
+        override val landingsDatabase = doobie.landingsDatabase
+        override val httpClient       = sttp.httpClient
       }
     }
 

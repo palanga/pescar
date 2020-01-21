@@ -17,7 +17,7 @@ object types {
     _links: Links,
     limit: Int,
     offset: Int,
-    records: List[Record],
+    records: List[Landing],
     total: Int,
   )
 
@@ -25,8 +25,8 @@ object types {
 
   type URL = String
 
-  case class Record(
-    fecha: String,
+  case class Landing(
+    fecha: String, // TODO as date
     flota: String,
     puerto: String,
     provincia: String,

@@ -1,17 +1,17 @@
 package gob.datos.consumer
 
-import gob.datos.consumer.persistence.record.{ RecordPersistence, TestDoobieDesembarques }
+import gob.datos.consumer.database.landing.{ DoobieLandingsDatabase, LandingsDatabase, TestDoobieLandingsDatabase }
 import zio.ZManaged
 import zio.blocking.Blocking
 import zio.test.Assertion.equalTo
-import zio.test.{ DefaultRunnableSpec, suite, testM, assert }
+import zio.test.{ DefaultRunnableSpec, assert, suite, testM }
 
 // TODO
 object MainTest
     extends DefaultRunnableSpec(
       suite("datos.gob.consumer")(
         testM("delete whole table") {
-          TestDoobieDesembarques.deleteTableManaged
+          TestDoobieLandingsDatabase.deleteTableManaged
             .use(
               _.map(
                 assert(
@@ -21,18 +21,18 @@ object MainTest
               )
             )
         },
-        testM("insert some desembarques") {
+        testM("insert some landings") {
 
           val data = List(
-            types.Record("2010-01", "Costeros", "Caleta Cordova", "Chubut", 26, "Escalante", 26021, None, None, "Peces", "Merluza hubbsi", "Merluza hubbsi S41", 386114),
-            types.Record("2010-01", "Costeros", "Caleta Cordova", "Chubut", 26, "Escalante", 26021, None, None, "Peces", "Pez gallo", "otras especies", 4367),
-            types.Record("2010-01", "Costeros", "Caleta Cordova", "Chubut", 26, "Escalante", 26021, None, None, "Peces", "Rayas nep", "Rayas (sin V. Cost)", 13)
+            types.Landing("2010-01", "Costeros", "Caleta Cordova", "Chubut", 26, "Escalante", 26021, None, None, "Peces", "Merluza hubbsi", "Merluza hubbsi S41", 386114),
+            types.Landing("2010-01", "Costeros", "Caleta Cordova", "Chubut", 26, "Escalante", 26021, None, None, "Peces", "Pez gallo", "otras especies", 4367),
+            types.Landing("2010-01", "Costeros", "Caleta Cordova", "Chubut", 26, "Escalante", 26021, None, None, "Peces", "Rayas nep", "Rayas (sin V. Cost)", 13)
           )
 
-          TestDoobieDesembarques.deleteTableManaged.use { delete =>
+          TestDoobieLandingsDatabase.deleteTableManaged.use { delete =>
             for {
               _     <- delete
-              saved <- persistence.record.RecordPersistence.module.saveMany(data)
+              saved <- LandingsDatabase.module.saveMany(data)
             } yield assert(saved, equalTo(data))
 
           }
@@ -48,13 +48,13 @@ object helper {
     for {
       env <- ZManaged.environment[Blocking]
       config <- config.ConfigLoader.test.toManaged_
-      doobie <- persistence.record.DoobieRecordPersistence.makeManaged(config.db)
+      doobie <- DoobieLandingsDatabase.makeManaged(config.db)
       //      sttp   <- http.client.SttpClient.makeManaged
     } yield {
-      new Blocking /*with Console*/ /*with HttpClient*/ with RecordPersistence {
-        override val blocking = env.blocking
+      new Blocking /*with Console*/ /*with HttpClient*/ with LandingsDatabase {
+        override val blocking         = env.blocking
 //        override val console  = env.console
-        override val recordPersistence = doobie.recordPersistence
+        override val landingsDatabase = doobie.landingsDatabase
         //        override val httpClient        = sttp.httpClient
       }
     }

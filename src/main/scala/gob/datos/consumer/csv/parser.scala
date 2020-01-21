@@ -1,6 +1,6 @@
 package gob.datos.consumer.csv
 
-import gob.datos.consumer.types.Record
+import gob.datos.consumer.types.Landing
 
 object parser {
 
@@ -9,8 +9,7 @@ object parser {
   private def split(string: String) = string.split(',')
 
   /**
-   * El csv tiene valores como "Otras - Algas, etc." con lo cual " etc." pasa a ser otro valor separado
-   * y hay que manejar ese caso particular.
+   * The csv may have valid text values with commas.
    *
    * line 13975: 2012-05,Fresqueros,otros puertos Buenos Aires,Buenos Aires,6,
    * sin especificar,6999,None,None,otras,Otras - Algas, etc.,otras especies,2717
@@ -38,7 +37,7 @@ object parser {
             :: AsInt(captura)
             :: Nil =>
         Right(
-          Record(
+          Landing(
             fecha,
             flota,
             puerto,
@@ -71,7 +70,7 @@ object parser {
       case _ :: _ :: _ :: _ :: provId :: _ :: depId :: _ :: _ :: _ :: _ :: _ :: cap :: Nil =>
         val columns =
           List(5 -> provId, 7 -> depId, 13 -> cap) // zip with column number
-            .map { case (col, value) => (col, value.toIntOption.toRight(value)) } // parse
+            .map { case (col, value) => (col, value.toIntOption.toRight(value)) } // try parse
             .collect { case (col, Left(value)) => (col, value) } // keep failed only
             .map { case (col, value) => s"""column $col "$value"""" }
             .mkString(", ")

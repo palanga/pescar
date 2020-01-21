@@ -48,8 +48,8 @@ scalacOptions ++= Seq(
 
 libraryDependencies += "com.github.ghostdogpr"        %% "caliban"         % "0.3.1"
 libraryDependencies += "com.github.ghostdogpr"        %% "caliban-http4s"  % "0.3.1"
-libraryDependencies += "com.github.pureconfig"        %% "pureconfig"      % "0.12.1"
-libraryDependencies += "com.github.pureconfig"        %% "pureconfig-yaml" % "0.12.1"
+libraryDependencies += "com.github.pureconfig"        %% "pureconfig"      % "0.12.2"
+libraryDependencies += "com.github.pureconfig"        %% "pureconfig-yaml" % "0.12.2"
 libraryDependencies += "dev.zio"                      %% "zio"             % "1.0.0-RC17"
 libraryDependencies += "dev.zio"                      %% "zio-streams"     % "1.0.0-RC17"
 libraryDependencies += "dev.zio"                      %% "zio-test"        % "1.0.0-RC17" % "test"
