@@ -3,6 +3,7 @@ package gob.datos.consumer
 object constants {
 
   object Path {
+
     /**
      * CSV with all data on sea catch landings by port, fleet and species for the period
      * January 2010 to December 2018.
@@ -15,13 +16,14 @@ object constants {
     /**
      * The same as [[CAPTURA_PUERTO_FLOTA_2010_2018]] but with errors in some columns. Used for testing.
      */
-    val CAPTURA_PUERTO_FLOTA_2010_2018_ERRORS = "/Users/palan/Downloads/captura-puerto-flota-2010-2018-utf8-errors.csv"
+    val CAPTURA_PUERTO_FLOTA_2010_2018_ERRORS =
+      "/Users/palan/Downloads/captura-puerto-flota-2010-2018-utf8-with-errors.csv"
+
   }
 
   object Url {
     val DATOS_AGROINDUSTRIA_GOB_AR = "https://datos.agroindustria.gob.ar/api/3/action/datastore_search"
   }
-
 
   object ResourceId {
 

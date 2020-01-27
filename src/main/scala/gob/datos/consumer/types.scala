@@ -1,5 +1,7 @@
 package gob.datos.consumer
 
+import java.time.YearMonth
+
 object types {
 
   case class RequestBody(
@@ -26,7 +28,7 @@ object types {
   type URL = String
 
   case class Landing(
-    fecha: String, // TODO as date
+    fecha: YearMonth,
     flota: String,
     puerto: String,
     provincia: String,

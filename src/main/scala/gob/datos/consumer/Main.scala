@@ -5,6 +5,7 @@ import gob.datos.consumer.database.landing.{ DoobieLandingsDatabase, LandingsDat
 import gob.datos.consumer.http.client
 import gob.datos.consumer.http.client.HttpClient
 import zio.blocking.Blocking
+import zio.clock.Clock
 import zio.console.Console
 import zio.stream.ZStream
 import zio.{ App, ZEnv, ZIO, ZManaged }
@@ -14,14 +15,20 @@ object Main extends App {
   /**
    * Consume landings data from datos.gob.ar and store them raw in our database.
    */
-  override def run(args: List[String]): ZIO[ZEnv, Nothing, Int] =
-    loadDataFromCsv
+  override def run(args: List[String]): ZIO[ZEnv, Nothing, Int] = {
+
+    import util.syntax.zio._
+
+    (loadDataFromCsv zipPar loadDataFromApi)
+      .map { case (csvData, apiData) => csvData ++ apiData }
       .flatMap(LandingsDatabase.module.saveMany)
-      .tap(savedLandings => zio.console.putStrLn("Landings saved:\n" ++ savedLandings.mkString("\n")))
-      .tap(savedLandings => zio.console.putStrLn("Total: " ++ savedLandings.size.toString))
+      .tapPrint(saved => s"Saved ${saved.size} landings")
+      .tapPrintTimed("Total time: ")
       .as(ExitStatus.Success)
       .provideSomeManaged(dependencies)
       .orDie
+
+  }
 
   /**
    * Read the whole file, parse it and collect to a either a list of success or a list of parse failures.
@@ -32,13 +39,13 @@ object Main extends App {
    *
    * Consider using a Stream based solution if the file is too long.
    */
-  private val loadDataFromCsv = {
+  val loadDataFromCsv = {
 
     def parse(unparsedCsvLines: List[String]) =
       unparsedCsvLines
         .map(csv.parser.parseLine)
         .zipWithIndex
-        .partitionMap { case (either, index) => either.left.map(Indexed(index, _)) } match {
+        .partitionMap { case (either, index) => either.left.map(Indexed(index + 1, _)) } match {
         case (Nil, landings) => Right(landings)
         case (failures, _)   => Left(failures)
       }
@@ -74,7 +81,6 @@ object Main extends App {
     val INITIAL_OFFSET = 0
     val PAGE_SIZE      = 100
 
-    // TODO investigate ZStream.paginate
     ZStream
       .iterate(INITIAL_OFFSET)(_ + PAGE_SIZE)
       .map(makeRequest(constants.ResourceId.DESEMBARQUE_DE_CAPTURA_DE_ESPECIES_MARÍTIMAS_2019)(PAGE_SIZE))
@@ -99,13 +105,14 @@ object Main extends App {
   // TODO investigate env combinators
   private val dependencies =
     for {
-      env    <- ZManaged.environment[Blocking with Console]
+      env    <- ZManaged.environment[Blocking with Clock with Console]
       config <- config.ConfigLoader.loadYamlConfig.toManaged_
       doobie <- DoobieLandingsDatabase.makeManaged(config.db)
       sttp   <- http.client.SttpClient.makeManaged
     } yield {
-      new Blocking with Console with HttpClient with LandingsDatabase {
+      new Blocking with Clock with Console with LandingsDatabase with HttpClient {
         override val blocking         = env.blocking
+        override val clock            = env.clock
         override val console          = env.console
         override val landingsDatabase = doobie.landingsDatabase
         override val httpClient       = sttp.httpClient

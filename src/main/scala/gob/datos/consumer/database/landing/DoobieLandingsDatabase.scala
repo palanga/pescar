@@ -1,10 +1,12 @@
 package gob.datos.consumer.database.landing
 
+import java.time.{ LocalDate, YearMonth }
+
+import doobie.util.Put
 import doobie.util.transactor.Transactor
 import doobie.util.update.Update
-import types.{ BlockingIO, DatabaseError, SomeLandingsNotInserted }
+import gob.datos.consumer.database.landing.types.BlockingIO
 import gob.datos.consumer.types.Landing
-import zio.ZIO
 import zio.blocking.Blocking
 
 trait DoobieLandingsDatabase extends LandingsDatabase {
@@ -17,21 +19,15 @@ trait DoobieLandingsDatabase extends LandingsDatabase {
 
     override def saveMany(landings: Iterable[Landing]) = {
 
-      import cats.implicits._
-      import doobie.implicits._
-      import zio.interop.catz._
+      import cats.instances.list.catsStdInstancesForList
+      import doobie.syntax.connectionio.toConnectionIOOps
+      import instances.yearMonthPut
+      import zio.interop.catz.taskConcurrentInstance
 
-      val sql = "INSERT INTO landings VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-
-      Update[Landing](sql)
+      Update[Landing](sql.insertMany)
         .updateMany(landings.toList)
         .transact(transactor)
-        .mapError(t => DatabaseError(landings, t)) // TODO shit
-        .flatMap( // TODO use ZIO.when ?
-          updatedCount =>
-            if (updatedCount == landings.size) ZIO.succeed(landings)
-            else ZIO.fail(SomeLandingsNotInserted(landings, updatedCount)) // TODO shit
-        )
+        .as(landings)
 
     }
 
@@ -42,8 +38,8 @@ trait DoobieLandingsDatabase extends LandingsDatabase {
 object DoobieLandingsDatabase {
 
   import cats.effect.Blocker
-  import doobie.hikari.HikariTransactor
   import config.DBConfig
+  import doobie.hikari.HikariTransactor
   import zio.ZIO
   import zio.blocking.Blocking
   import zio.interop.catz._
@@ -69,4 +65,16 @@ object DoobieLandingsDatabase {
       }
     }
 
+}
+
+object sql {
+
+  import doobie.implicits._
+
+  val insertMany = sql"INSERT INTO landings VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)".query.sql
+
+}
+
+object instances {
+  implicit val yearMonthPut: Put[YearMonth] = Put[LocalDate].contramap(_ atDay 1)
 }

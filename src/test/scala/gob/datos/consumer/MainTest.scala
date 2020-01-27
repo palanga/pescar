@@ -24,9 +24,9 @@ object MainTest
         testM("insert some landings") {
 
           val data = List(
-            types.Landing("2010-01", "Costeros", "Caleta Cordova", "Chubut", 26, "Escalante", 26021, None, None, "Peces", "Merluza hubbsi", "Merluza hubbsi S41", 386114),
-            types.Landing("2010-01", "Costeros", "Caleta Cordova", "Chubut", 26, "Escalante", 26021, None, None, "Peces", "Pez gallo", "otras especies", 4367),
-            types.Landing("2010-01", "Costeros", "Caleta Cordova", "Chubut", 26, "Escalante", 26021, None, None, "Peces", "Rayas nep", "Rayas (sin V. Cost)", 13)
+            types.Landing(java.time.YearMonth.parse("2010-01"), "Costeros", "Caleta Cordova", "Chubut", 26, "Escalante", 26021, None, None, "Peces", "Merluza hubbsi", "Merluza hubbsi S41", 386114),
+            types.Landing(java.time.YearMonth.parse("2010-01"), "Costeros", "Caleta Cordova", "Chubut", 26, "Escalante", 26021, None, None, "Peces", "Pez gallo", "otras especies", 4367),
+            types.Landing(java.time.YearMonth.parse("2010-01"), "Costeros", "Caleta Cordova", "Chubut", 26, "Escalante", 26021, None, None, "Peces", "Rayas nep", "Rayas (sin V. Cost)", 13)
           )
 
           TestDoobieLandingsDatabase.deleteTableManaged.use { delete =>

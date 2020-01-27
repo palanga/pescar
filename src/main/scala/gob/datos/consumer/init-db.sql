@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS landings;
 
 CREATE TABLE landings
 (
-    fecha            VARCHAR NOT NULL,
+    fecha            DATE    NOT NULL,
     flota            VARCHAR NOT NULL,
     puerto           VARCHAR NOT NULL,
     provincia        VARCHAR NOT NULL,

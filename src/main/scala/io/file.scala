@@ -10,8 +10,7 @@ object file {
   /**
    * Open a whole file as a String
    */
-  def open(path: String) =
-    openAsyncChannel(path).use(asString)
+  def open(path: String) = openAsyncChannel(path).use(asString)
 
   /**
    * Open a whole resource file as a String
@@ -26,14 +25,12 @@ object file {
   /**
    * List file lines
    */
-  def list(path: String) =
-    openAsyncChannel(path).use(asStringList)
+  def list(path: String) = openAsyncChannel(path).use(asStringList)
 
   /**
    * Stream file lines
    */
-  def stream(path: String) =
-    Stream.unwrapManaged(openAsyncChannel(path).map(asStringStream))
+  def stream(path: String) = Stream.unwrapManaged(openAsyncChannel(path).map(asStringStream))
 
   private def openAsyncChannel(uri: String) =
     for {

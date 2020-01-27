@@ -1,8 +1,8 @@
 db:
   driver-name: "org.postgresql.Driver"
-  url: "jdbc:postgresql://postgres:5432/postgres"
-  username: "postgres"
-  password: "postgres"
+  url: "jdbc:postgresql://postgres:5432/datos_gob"
+  username: "palan"
+  password: ""
   connection-thread-pool-size: 32
 
 server:
