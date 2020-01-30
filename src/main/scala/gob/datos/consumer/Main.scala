@@ -102,7 +102,7 @@ object Main extends App {
     val Success = 0
   }
 
-  // TODO investigate env combinators
+  // TODO will go away in ZIO 1.0.0-RC18
   private val dependencies =
     for {
       env    <- ZManaged.environment[Blocking with Clock with Console]
