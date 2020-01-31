@@ -1,8 +1,8 @@
-package api.persistence
+package api.database
 
-import api.Types._
+import api.types._
 
-object Data {
+object DummyDatabase {
 
   private val months = List(
     January,

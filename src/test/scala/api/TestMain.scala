@@ -1,12 +1,12 @@
 package api
 
-import io.circe.literal._
 import api.metrics.MetricsMock
-import api.syntax.gqlquery._
+import io.circe.literal._
+import util.syntax.ziointerop.stringops._
 import zio.ZManaged
 import zio.clock.Clock
 import zio.test.Assertion.equalTo
-import zio.test.{ assert, suite, testM, DefaultRunnableSpec }
+import zio.test.{ DefaultRunnableSpec, assert, suite, testM }
 
 object TestMain
     extends DefaultRunnableSpec(
@@ -34,7 +34,7 @@ object TestMain
               }
             }"""
 
-          query.runAsJson map (assert(_, equalTo(expected)))
+          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
 
         },
         testM("Query data -> __typename") {
@@ -62,7 +62,7 @@ object TestMain
               }
             }"""
 
-          query.runAsJson map (assert(_, equalTo(expected)))
+          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
 
         },
         testM("Query data -> Histogram") {
@@ -131,7 +131,7 @@ object TestMain
               }
             }"""
 
-          query.runAsJson map (assert(_, equalTo(expected)))
+          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
 
         },
         testM("Query data -> KPI") {
@@ -161,7 +161,7 @@ object TestMain
               }
             }"""
 
-          query.runAsJson map (assert(_, equalTo(expected)))
+          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
 
         },
         testM("Query title and data") {
@@ -244,7 +244,7 @@ object TestMain
               }
             }"""
 
-          query.runAsJson map (assert(_, equalTo(expected)))
+          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
 
         },
         testM("Query filtering by title") {
@@ -267,7 +267,7 @@ object TestMain
               }
             }"""
 
-          query.runAsJson map (assert(_, equalTo(expected)))
+          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
 
         },
         testM("Query filtering by title, multiple words") {
@@ -291,7 +291,7 @@ object TestMain
               }
             }"""
 
-          query.runAsJson map (assert(_, equalTo(expected)))
+          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
 
         },
         testM("Query filtering by title by an empty string should return all") {
@@ -317,7 +317,7 @@ object TestMain
               }
             }"""
 
-          query.runAsJson map (assert(_, equalTo(expected)))
+          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
 
         },
       ).provideSomeManaged(helper.dependencies)

@@ -1,11 +1,11 @@
 package api.graphql
 
-import caliban.schema.Annotations.GQLDescription
-import api.Types.{ Metric, MetricTitle }
 import api.metrics.Metrics
+import api.types.{ Metric, MetricTitle }
+import caliban.schema.Annotations.GQLDescription
 import zio.URIO
 
-object Types {
+object types {
 
   case class MetricsArgs(keywords: Option[List[MetricTitle]])
 

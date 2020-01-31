@@ -3,13 +3,13 @@ package api.graphql
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter._
 
+import api.Main.AppEnv
+import api.graphql.types.Queries
+import api.metrics.Metrics
 import caliban.GraphQL.graphQL
-import caliban.RootResolver
 import caliban.Value.StringValue
 import caliban.schema.{ GenericSchema, Schema }
-import api.Main.AppEnv
-import api.graphql.Types.Queries
-import api.metrics.Metrics
+import caliban.{ CalibanError, GraphQL, GraphQLInterpreter, RootResolver }
 
 object Interpreter extends GenericSchema[AppEnv] {
 
@@ -17,12 +17,14 @@ object Interpreter extends GenericSchema[AppEnv] {
   implicit val localDateTimeSchema: Schema.Typeclass[LocalDateTime] =
     scalarSchema("LocalDateTime", None, localDateTime => StringValue(localDateTime format ISO_LOCAL_DATE_TIME))
 
-  val make = graphQL(
+  private val gql: GraphQL[AppEnv] = graphQL(
     RootResolver(
       Queries(
         _.keywords.fold(Metrics.>.all)(Metrics.>.filterByTitle),
       ),
     )
   )
+
+  val make: GraphQLInterpreter[AppEnv, CalibanError] = gql.interpreter
 
 }

@@ -6,14 +6,15 @@ import zio.ZManaged
 import zio.blocking.Blocking
 import zio.clock.Clock
 import zio.console.Console
-import zio.test.{ assert, suite, testM, DefaultRunnableSpec }
+import zio.test.{ DefaultRunnableSpec, assert, suite, testM }
 
 object LoadTest
     extends DefaultRunnableSpec(
       suite("datos.gob.consumer.loadtest")(
         testM("load test db") {
 
-          import util.syntax.zio._
+          import util.syntax.ziointerop.iterableops._
+          import util.syntax.zioops._
 
           val TIMES = 10
 

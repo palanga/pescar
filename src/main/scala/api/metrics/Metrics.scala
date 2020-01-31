@@ -1,6 +1,6 @@
 package api.metrics
 
-import api.Types.Metric
+import api.types.Metric
 import zio.ZIO
 
 trait Metrics {
@@ -24,12 +24,12 @@ object Metrics {
 
 trait MetricsMock extends Metrics {
 
-  import api.persistence.Data
+  import api.database.DummyDatabase
 
   final val metrics = new Metrics.Service[Any] {
-    override def all: ZIO[Any, Nothing, List[Metric]] = ZIO succeed Data.metrics
+    override def all: ZIO[Any, Nothing, List[Metric]] = ZIO succeed DummyDatabase.metrics
     override def filterByTitle(keywords: List[String]): ZIO[Any, Nothing, List[Metric]] =
-      ZIO succeed Data.metrics.filter(metric => keywords exists metric.title.contains)
+      ZIO succeed DummyDatabase.metrics.filter(metric => keywords exists metric.title.contains)
   }
 
 }

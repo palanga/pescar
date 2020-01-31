@@ -1,6 +1,6 @@
 package api
 
-object Types {
+object types {
 
   case class Metric(title: MetricTitle, data: MetricData)
 

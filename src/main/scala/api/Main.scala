@@ -1,8 +1,8 @@
 package api
 
-import org.http4s.server.blaze.BlazeServerBuilder
 import api.graphql.Interpreter
 import api.metrics.{ Metrics, MetricsMock }
+import org.http4s.server.blaze.BlazeServerBuilder
 import zio.clock.Clock
 import zio.interop.catz._
 import zio.{ App, RIO, ZEnv, ZIO }
@@ -22,7 +22,7 @@ object Main extends App {
       }
     )
 
-  val httpApp = Routes all Interpreter.make.interpreter
+  val httpApp: org.http4s.HttpApp[AppTask] = Routes all Interpreter.make
 
   private val makeServer: ZIO[AppEnv, Throwable, Unit] =
     ZIO.runtime[AppEnv] >>= { implicit env =>
