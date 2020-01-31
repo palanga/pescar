@@ -43,10 +43,15 @@ trait SttpClient extends HttpClient {
 object SttpClient {
 
   val makeManaged =
-    AsyncHttpClientZioBackend().toManaged(_.close.orDie) map { backend =>
+    AsyncHttpClientZioBackend().toManaged(closeBackend) map { backend =>
       new SttpClient {
         override protected implicit val sttpBackend = backend
       }
     }
+
+  import zio.console.putStrLn
+
+  private def closeBackend(backend: SttpBackend[Task, Nothing, WebSocketHandler]) =
+    putStrLn("Closing sttp backend...") *> backend.close.orDie <* putStrLn("Succesfully closed sttp backend.")
 
 }
