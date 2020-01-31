@@ -1,4 +1,4 @@
-name := "the-scientist"
+name := "analytics"
 
 version := "0.1"
 
