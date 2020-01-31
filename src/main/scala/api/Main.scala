@@ -1,8 +1,8 @@
-package thescientist
+package api
 
 import org.http4s.server.blaze.BlazeServerBuilder
-import thescientist.graphql.Interpreter
-import thescientist.metrics.{ Metrics, MetricsMock }
+import api.graphql.Interpreter
+import api.metrics.{ Metrics, MetricsMock }
 import zio.clock.Clock
 import zio.interop.catz._
 import zio.{ App, RIO, ZEnv, ZIO }

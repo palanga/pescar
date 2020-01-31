@@ -1,11 +1,11 @@
-package thescientist
+package api
 
 import io.circe.Json
 import io.circe.literal._
 import org.http4s._
 import org.http4s.implicits._
 import org.http4s.circe._
-import thescientist.Main.{ httpApp, AppEnv }
+import api.Main.{ httpApp, AppEnv }
 import zio.ZIO
 import zio.interop.catz._
 

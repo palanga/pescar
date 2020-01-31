@@ -1,4 +1,4 @@
-package thescientist.graphql
+package api.graphql
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter._
@@ -7,9 +7,9 @@ import caliban.GraphQL.graphQL
 import caliban.RootResolver
 import caliban.Value.StringValue
 import caliban.schema.{ GenericSchema, Schema }
-import thescientist.Main.AppEnv
-import thescientist.graphql.Types.Queries
-import thescientist.metrics.Metrics
+import api.Main.AppEnv
+import api.graphql.Types.Queries
+import api.metrics.Metrics
 
 object Interpreter extends GenericSchema[AppEnv] {
 

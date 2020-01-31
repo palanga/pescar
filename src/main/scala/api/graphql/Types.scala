@@ -1,8 +1,8 @@
-package thescientist.graphql
+package api.graphql
 
 import caliban.schema.Annotations.GQLDescription
-import thescientist.Types.{ Metric, MetricTitle }
-import thescientist.metrics.Metrics
+import api.Types.{ Metric, MetricTitle }
+import api.metrics.Metrics
 import zio.URIO
 
 object Types {

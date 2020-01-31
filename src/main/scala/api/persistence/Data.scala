@@ -1,6 +1,6 @@
-package thescientist.persistence
+package api.persistence
 
-import thescientist.Types._
+import api.Types._
 
 object Data {
 

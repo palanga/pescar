@@ -1,8 +1,8 @@
-package thescientist
+package api
 
 import io.circe.literal._
-import thescientist.metrics.MetricsMock
-import thescientist.syntax.gqlquery._
+import api.metrics.MetricsMock
+import api.syntax.gqlquery._
 import zio.ZManaged
 import zio.clock.Clock
 import zio.test.Assertion.equalTo

@@ -1,4 +1,4 @@
-package thescientist
+package api
 
 object Types {
 

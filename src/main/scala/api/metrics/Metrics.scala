@@ -1,6 +1,6 @@
-package thescientist.metrics
+package api.metrics
 
-import thescientist.Types.Metric
+import api.Types.Metric
 import zio.ZIO
 
 trait Metrics {
@@ -24,7 +24,7 @@ object Metrics {
 
 trait MetricsMock extends Metrics {
 
-  import thescientist.persistence.Data
+  import api.persistence.Data
 
   final val metrics = new Metrics.Service[Any] {
     override def all: ZIO[Any, Nothing, List[Metric]] = ZIO succeed Data.metrics
