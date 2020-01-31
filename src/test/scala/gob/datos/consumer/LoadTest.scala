@@ -8,7 +8,7 @@ import zio.clock.Clock
 import zio.console.Console
 import zio.test.{ assert, suite, testM, DefaultRunnableSpec }
 
-object Benchmark
+object LoadTest
     extends DefaultRunnableSpec(
       suite("datos.gob.consumer.loadtest")(
         testM("load test db") {
