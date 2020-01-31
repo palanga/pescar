@@ -1,21 +1,18 @@
 package thescientist
 
-import caliban.Http4sAdapter
-import cats.data.Kleisli
+import caliban.{ CalibanError, GraphQLInterpreter, Http4sAdapter }
 import org.http4s.dsl.Http4sDsl
 import org.http4s.implicits._
 import org.http4s.server.Router
 import org.http4s.server.middleware.CORS
-import org.http4s.{ Request, Response }
-import thescientist.Main.AppTask
-import thescientist.graphql.Interpreter.AppInterpreter
+import thescientist.Main.{ AppEnv, AppTask }
 import zio.interop.catz._
 
 object Routes extends Http4sDsl[AppTask] {
 
-  def all(interpreter: AppInterpreter): Kleisli[AppTask, Request[AppTask], Response[AppTask]] =
+  def all(interpreter: GraphQLInterpreter[AppEnv, CalibanError]) =
     Router(
-      "/api/graphql" -> CORS(Http4sAdapter.makeRestService(interpreter)),
+      "/api/graphql" -> CORS(Http4sAdapter.makeHttpService(interpreter)),
       "/ws/graphql"  -> CORS(Http4sAdapter.makeWebSocketService(interpreter)),
     ).orNotFound
 

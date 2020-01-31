@@ -31,8 +31,7 @@ object TestMain
                   { "title": "Desembarques de pejerrey por mes" },
                   { "title": "Desembarques de pulpo por mes" }
                 ]
-              },
-              "errors": []
+              }
             }"""
 
           query.runAsJson map (assert(_, equalTo(expected)))
@@ -60,8 +59,7 @@ object TestMain
                   { "data": { "__typename": "Histogram" } },
                   { "data": { "__typename": "Histogram" } }
                 ]
-              },
-              "errors": []
+              }
             }"""
 
           query.runAsJson map (assert(_, equalTo(expected)))
@@ -130,8 +128,7 @@ object TestMain
                     }
                   }
                 ]
-              },
-              "errors": []
+              }
             }"""
 
           query.runAsJson map (assert(_, equalTo(expected)))
@@ -161,8 +158,7 @@ object TestMain
                   { "data": {} },
                   { "data": {} }
                 ]
-              },
-              "errors": []
+              }
             }"""
 
           query.runAsJson map (assert(_, equalTo(expected)))
@@ -245,8 +241,7 @@ object TestMain
                     }
                   }
                 ]
-              },
-              "errors": []
+              }
             }"""
 
           query.runAsJson map (assert(_, equalTo(expected)))
@@ -269,8 +264,7 @@ object TestMain
                 "metrics": [
                   { "title": "Desembarques de langostinos por mes" }
                 ]
-              },
-              "errors": []
+              }
             }"""
 
           query.runAsJson map (assert(_, equalTo(expected)))
@@ -294,8 +288,7 @@ object TestMain
                   { "title": "Desembarques de langostinos por mes" },
                   { "title": "Desembarques de pejerrey por mes" }
                 ]
-              },
-              "errors": []
+              }
             }"""
 
           query.runAsJson map (assert(_, equalTo(expected)))
@@ -321,8 +314,7 @@ object TestMain
                   { "title": "Desembarques de pejerrey por mes" },
                   { "title": "Desembarques de pulpo por mes" }
                 ]
-              },
-              "errors": []
+              }
             }"""
 
           query.runAsJson map (assert(_, equalTo(expected)))

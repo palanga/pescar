@@ -4,6 +4,8 @@ version := "0.1"
 
 scalaVersion := "2.13.1"
 
+fork in Test := true // OutOfMemory Metaspace
+
 scalacOptions ++= Seq(
   "-deprecation",                  // Emit warning and location for usages of deprecated APIs.
   "-encoding", "utf-8",            // Specify character encoding used by source files.
@@ -46,8 +48,8 @@ scalacOptions ++= Seq(
 
 //scalacOptions += "-Ylog-classpath"
 
-libraryDependencies += "com.github.ghostdogpr"        %% "caliban"         % "0.3.1"
-libraryDependencies += "com.github.ghostdogpr"        %% "caliban-http4s"  % "0.3.1"
+libraryDependencies += "com.github.ghostdogpr"        %% "caliban"         % "0.5.0"
+libraryDependencies += "com.github.ghostdogpr"        %% "caliban-http4s"  % "0.5.0"
 libraryDependencies += "com.github.pureconfig"        %% "pureconfig"      % "0.12.2"
 libraryDependencies += "com.github.pureconfig"        %% "pureconfig-yaml" % "0.12.2"
 libraryDependencies += "dev.zio"                      %% "zio"             % "1.0.0-RC17"
@@ -64,8 +66,8 @@ libraryDependencies += "com.softwaremill.sttp.client" %% "async-http-client-back
 libraryDependencies += "com.softwaremill.sttp.client" %% "circe"                         % "2.0.0-RC5"
 libraryDependencies += "com.softwaremill.sttp.client" %% "core"                          % "2.0.0-RC5"
 libraryDependencies += "dev.zio"                      %% "zio-nio"                       % "0.4.0"
-libraryDependencies += "org.http4s"                   %% "http4s-blaze-client"           % "0.21.0-M6"
-libraryDependencies += "org.http4s"                   %% "http4s-dsl"                    % "0.21.0-M6"
+libraryDependencies += "org.http4s"                   %% "http4s-blaze-client"           % "0.21.0-M5"
+libraryDependencies += "org.http4s"                   %% "http4s-dsl"                    % "0.21.0-M5"
 libraryDependencies += "org.tpolecat"                 %% "doobie-core"                   % "0.8.6"
 libraryDependencies += "org.tpolecat"                 %% "doobie-hikari"                 % "0.8.6"
 libraryDependencies += "org.tpolecat"                 %% "doobie-postgres"               % "0.8.6"

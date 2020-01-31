@@ -7,14 +7,14 @@ import zio.clock.Clock
 import zio.interop.catz._
 import zio.{ App, RIO, ZEnv, ZIO }
 
-object Main {
+object Main extends App {
 
   trait BaseEnv extends Clock
 
   type AppEnv     = BaseEnv with Metrics
   type AppTask[A] = RIO[AppEnv, A]
 
-  def run(args: List[String]): ZIO[ZEnv, Nothing, Int] =
+  override def run(args: List[String]): ZIO[ZEnv, Nothing, Int] =
     (makeServer.orDie map (_ => 0)).provideSome[ZEnv](
       env =>
         new MetricsMock with BaseEnv {
@@ -22,7 +22,7 @@ object Main {
       }
     )
 
-  val httpApp = Routes all Interpreter.apply
+  val httpApp = Routes all Interpreter.make.interpreter
 
   private val makeServer: ZIO[AppEnv, Throwable, Unit] =
     ZIO.runtime[AppEnv] >>= { implicit env =>
