@@ -5,7 +5,7 @@ object constants {
   object Path {
 
     /**
-     * CSV with all data on sea catch landings by port, fleet and species for the period
+     * CSV with withInterpreter data on sea catch landings by port, fleet and species for the period
      * January 2010 to December 2018.
      *
      * 5489330 bytes

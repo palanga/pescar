@@ -1,23 +1,33 @@
 package api
 
+import java.time.YearMonth
+
 object types {
 
-  case class Metric(title: MetricTitle, data: MetricData)
+  sealed trait Metric extends Product with Serializable
+  object Metric {
 
-  type MetricTitle = String
+    final case class Landing(
+      date: YearMonth,
+      fleet: Fleet,
+      location: Location,
+      specie: Specie,
+      fishCatch: Int,
+    ) extends Metric
 
-  sealed trait MetricData
-  case class Histogram(values: List[HistogramValue]) extends MetricData
-  case class KPI(value: MetricValue)                 extends MetricData
+  }
 
-  case class HistogramValue(month: Month, value: MetricValue)
+  case class Fleet(name: String) extends AnyVal
 
-  sealed trait Month
-  case object January  extends Month
-  case object February extends Month
-  case object March    extends Month
-  case object April    extends Month
+  case class Location(port: Port, department: Department, province: Province)
+  case class Port(name: String, geoLocation: Option[GeoLocation])
+  case class GeoLocation(latitude: GeoDegree, longitude: GeoDegree)
+  case class GeoDegree(value: Float)  extends AnyVal
+  case class Department(name: String) extends AnyVal
+  case class Province(name: String)   extends AnyVal
 
-  type MetricValue = Int
+  case class Specie(name: String, category: Category, group: CategoryGroup)
+  case class Category(name: String)      extends AnyVal
+  case class CategoryGroup(name: String) extends AnyVal
 
 }

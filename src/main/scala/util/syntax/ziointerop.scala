@@ -7,6 +7,7 @@ object ziointerop {
   object stringops {
 
     import api.Main.AppTask
+    import api.Main.AppTask
     import io.circe.Json
     import io.circe.literal._
     import org.http4s._
@@ -16,7 +17,10 @@ object ziointerop {
 
     implicit class StringOps(self: String) {
 
-      def runOn(httpApp: HttpApp[AppTask], uri: Uri = uri"/api/graphql", method: Method = Method.POST) =
+      def runOn(httpApp: HttpApp[AppTask], uri: Uri = uri"/api/borrar", method: Method = Method.POST) =
+        httpApp.run(Request(method, uri).withEntity(json"""{ "query": $self }""")) flatMap (_.as[Json])
+
+      def runOnV2(httpApp: HttpApp[AppTask], uri: Uri = uri"/api/borrar", method: Method = Method.POST) =
         httpApp.run(Request(method, uri).withEntity(json"""{ "query": $self }""")) flatMap (_.as[Json])
 
     }

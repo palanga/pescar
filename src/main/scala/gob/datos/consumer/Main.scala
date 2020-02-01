@@ -66,7 +66,7 @@ object Main extends App {
       extends Exception("On lines:\n" ++ errors.mkString("\n"))
 
   /**
-   * Fetch all the data and collect to a list.
+   * Fetch withInterpreter the data and collect to a list.
    *
    * The motivation behind this is because if we save the data as it's coming we would have the risk of, at the
    * presence of some error, stop saving the subsequent data and therefore leaving the database in a partial and
