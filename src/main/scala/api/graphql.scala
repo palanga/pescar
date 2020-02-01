@@ -9,16 +9,16 @@ import caliban.schema.{ GenericSchema, Schema }
 object graphql extends GenericSchema[AppEnv] {
 
   import java.time.YearMonth
+  import java.time.format.DateTimeFormatter.ISO_LOCAL_DATE
 
   import api.types.Metric.Landing
   import api.types._
 
-  //  import java.time.format.DateTimeFormatter._
   implicit val yearMonthSchema: Schema.Typeclass[YearMonth] =
     scalarSchema[YearMonth](
       "YearMonth",
       None,
-      yearMonth => StringValue(yearMonth.getYear.toString ++ "-" ++ yearMonth.getMonthValue.toString)
+      yearMonth => StringValue(yearMonth.atDay(1).format(ISO_LOCAL_DATE).dropRight(3))
     )
 
   case class Queries(
@@ -27,11 +27,11 @@ object graphql extends GenericSchema[AppEnv] {
 
   private val emptyLanding =
     Landing(
-      YearMonth.of(0, 1),
+      YearMonth.of(2017, 7),
       Fleet(""),
       Location(Port("", None), Department(""), Province("")),
       Specie("", Category(""), CategoryGroup("")),
-      0
+      7,
     )
 
   val make =

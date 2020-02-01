@@ -28,7 +28,38 @@ object TestMain
               }
             }"""
 
-          query.runOnV2(Main.httpApp) map (assert(_, equalTo(expected)))
+          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
+
+        },
+        testM("date and fishCatch") {
+
+          val query =
+            """
+              |{
+              |	 metrics {
+              |  __typename
+              |  ... on Landing {
+              |      date
+              |      fishCatch
+              |    }
+              |  }
+              |}
+              |""".stripMargin
+
+          val expected =
+            json"""{
+              "data": {
+                "metrics": [
+                  {
+                    "__typename" : "Landing",
+                    "date": "2017-07",
+                    "fishCatch": 7
+                  }
+                ]
+              }
+            }"""
+
+          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
 
         },
       )
