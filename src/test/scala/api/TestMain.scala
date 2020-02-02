@@ -62,5 +62,74 @@ object TestMain
           query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
 
         },
+        testM("group by date and then by port") {
+
+          val query =
+            """
+              |{
+              |	 landings {
+              |    byDate {
+              |      key
+              |      catchCount
+              |      byPort {
+              |        key {
+              |          name
+              |        }
+              |        catchCount
+              |      }
+              |    }
+              |  }
+              |}
+              |""".stripMargin
+
+          val expected =
+            json"""{
+              "data": {
+                "landings": {
+                  "byDate": [
+                    {
+                      "key": "2017-07",
+                      "catchCount": 7,
+                      "byPort": [
+                        {
+                          "key": {
+                            "name": "Mar del Plata"
+                          },
+                          "catchCount": 5
+                        },
+                        {
+                          "key": {
+                            "name": "Puerto Madryn"
+                          },
+                          "catchCount": 2
+                        }
+                      ]
+                    },
+                    {
+                      "key": "2017-08",
+                      "catchCount": 30,
+                      "byPort": [
+                        {
+                          "key": {
+                            "name": "Mar del Plata"
+                          },
+                          "catchCount": 17
+                        },
+                        {
+                          "key": {
+                            "name": "Puerto Madryn"
+                          },
+                          "catchCount": 13
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }"""
+
+          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
+
+        },
       )
     )
