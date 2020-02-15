@@ -5,7 +5,7 @@ object constants {
   object Path {
 
     /**
-     * CSV with withInterpreter data on sea catch landings by port, fleet and species for the period
+     * CSV with data on sea catch landings by location, fleet and species for the period
      * January 2010 to December 2018.
      *
      * 5489330 bytes
@@ -28,12 +28,12 @@ object constants {
   object ResourceId {
 
     /**
-     * Data on sea catch landings by port, fleet and species for the period January 2010 to December 2018.
+     * Data on sea catch landings by location, fleet and species for the period January 2010 to December 2018.
      */
     val DESEMBARQUE_DE_CAPTURA_DE_ESPECIES_MARÍTIMAS_2010_A_2018 = "1996a5ec-7075-4062-9a79-05868fc2a2e2"
 
     /**
-     * Data on sea catch landings by port, fleet and species for the period January 2019 to present.
+     * Data on sea catch landings by location, fleet and species for the period January 2019 to present.
      */
     val DESEMBARQUE_DE_CAPTURA_DE_ESPECIES_MARÍTIMAS_2019 = "77a15b4a-71e1-4b81-9732-ae0b6863c8cc"
 
