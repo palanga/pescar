@@ -3,133 +3,131 @@ package api
 import io.circe.literal._
 import util.syntax.ziointerop.stringops._
 import zio.test.Assertion.equalTo
-import zio.test.{ assert, suite, testM, DefaultRunnableSpec }
+import zio.test.{ DefaultRunnableSpec, TestAspect, assert, suite, testM }
 
 object TestMain
-    extends DefaultRunnableSpec(
-      suite("graphql api")(
-        testM("metric type") {
+  extends DefaultRunnableSpec(
+    suite("graphql api")(
+      testM("group by date and then by location and then by specie") {
 
-          val query =
-            """
-              |{
-              |	 metrics {
-              |    __typename
-              |  }
-              |}
-              |""".stripMargin
+        val query =
+          """
+            |{
+            |	 landings {
+            |    byDate {
+            |      key
+            |      value {
+            |        total
+            |        byLocation {
+            |          key
+            |          value {
+            |            total
+            |            bySpecie {
+            |              key
+            |              value {
+            |                total
+            |              }
+            |            }
+            |          }
+            |        }
+            |      }
+            |    }
+            |  }
+            |}
+            |""".stripMargin
 
-          val expected =
-            json"""{
-              "data": {
-                "metrics": [
-                  { "__typename": "Landing" }
-                ]
-              }
-            }"""
-
-          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
-
-        },
-        testM("date and fishCatch") {
-
-          val query =
-            """
-              |{
-              |	 metrics {
-              |  __typename
-              |  ... on Landing {
-              |      date
-              |      fishCatch
-              |    }
-              |  }
-              |}
-              |""".stripMargin
-
-          val expected =
-            json"""{
-              "data": {
-                "metrics": [
-                  {
-                    "__typename" : "Landing",
-                    "date": "2017-07",
-                    "fishCatch": 7
-                  }
-                ]
-              }
-            }"""
-
-          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
-
-        },
-        testM("group by date and then by port") {
-
-          val query =
-            """
-              |{
-              |	 landings {
-              |    byDate {
-              |      key
-              |      catchCount
-              |      byPort {
-              |        key {
-              |          name
-              |        }
-              |        catchCount
-              |      }
-              |    }
-              |  }
-              |}
-              |""".stripMargin
-
-          val expected =
-            json"""{
+        val expected =
+          json"""{
               "data": {
                 "landings": {
                   "byDate": [
                     {
                       "key": "2017-07",
-                      "catchCount": 7,
-                      "byPort": [
-                        {
-                          "key": {
-                            "name": "Mar del Plata"
+                      "value": {
+                        "total": 7,
+                        "byLocation": [
+                          {
+                            "key": "Mar del Plata",
+                            "value": {
+                              "total": 5,
+                              "bySpecie": [
+                                {
+                                  "key": "Langostino",
+                                  "value": { "total": 2 }
+                                },
+                                {
+                                  "key": "Pulpo",
+                                  "value": { "total": 3}
+                                }
+                              ]
+                            }
                           },
-                          "catchCount": 5
-                        },
-                        {
-                          "key": {
-                            "name": "Puerto Madryn"
-                          },
-                          "catchCount": 2
-                        }
-                      ]
+                          {
+                            "key": "Puerto Madryn",
+                            "value": {
+                              "total": 2,
+                              "bySpecie": [
+                                {
+                                  "key": "Langostino",
+                                  "value": { "total": 1 }
+                                },
+                                {
+                                  "key": "Pulpo",
+                                  "value": { "total": 1 }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
                     },
                     {
                       "key": "2017-08",
-                      "catchCount": 30,
-                      "byPort": [
-                        {
-                          "key": {
-                            "name": "Mar del Plata"
+                      "value": {
+                        "total": 30,
+                        "byLocation": [
+                          {
+                            "key": "Mar del Plata",
+                            "value": {
+                              "total": 17,
+                              "bySpecie": [
+                                {
+                                  "key": "Langostino",
+                                  "value": { "total": 10 }
+                                },
+                                {
+                                  "key": "Pulpo",
+                                  "value": { "total": 7 }
+                                }
+                              ]
+                            }
                           },
-                          "catchCount": 17
-                        },
-                        {
-                          "key": {
-                            "name": "Puerto Madryn"
-                          },
-                          "catchCount": 13
-                        }
-                      ]
+                          {
+                            "key": "Puerto Madryn",
+                            "value": {
+                              "total": 13,
+                              "bySpecie": [
+                                {
+                                  "key": "Langostino",
+                                  "value": { "total": 9 }
+                                },
+                                {
+                                  "key": "Pulpo",
+                                  "value": { "total": 4 }
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
                     }
                   ]
                 }
               }
             }"""
 
-          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
+        query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
 
-        },
-      )
+      } @@ TestAspect.ignore,
     )
+  )
