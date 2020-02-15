@@ -16,7 +16,7 @@ object ziointerop {
 
     implicit class StringOps(self: String) {
 
-      def runOn(httpApp: HttpApp[AppTask], uri: Uri = uri"/api/borrar", method: Method = Method.POST) =
+      def runOn(httpApp: HttpApp[AppTask], uri: Uri = uri"/api", method: Method = Method.POST) =
         httpApp.run(Request(method, uri).withEntity(json"""{ "query": $self }""")) flatMap (_.as[Json])
 
     }

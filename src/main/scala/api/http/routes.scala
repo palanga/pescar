@@ -12,8 +12,8 @@ object routes extends Http4sDsl[AppTask] {
 
   def withInterpreter(interpreter: GraphQLInterpreter[AppEnv, CalibanError]) =
     Router(
-      "/api/borrar" -> CORS(Http4sAdapter.makeHttpService(interpreter)),
-      "/ws/borrar"  -> CORS(Http4sAdapter.makeWebSocketService(interpreter)),
+      "/api" -> CORS(Http4sAdapter.makeHttpService(interpreter)),
+      "/ws"  -> CORS(Http4sAdapter.makeWebSocketService(interpreter)),
     ).orNotFound
 
 }
