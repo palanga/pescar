@@ -5,40 +5,36 @@ import java.time.YearMonth
 import api.database.landings.landings_summary_tables._
 import api.database.landings.landings_tables._
 import api.types.{ Fleet, Location, Specie }
-import util.syntax.listops._
-import zio.ZIO
+import zio.stream.ZStream
 
 object Dummy {
 
   def landingsSummaryByDate(dates: Set[YearMonth]) =
-    ZIO succeed landingsSummaryByDateTable(dates).toMap
+    ZStream fromIterable landingsSummaryByDateTable(dates)
 
   def landingsSummaryByDateByLocation(dates: Set[YearMonth], locations: Set[Location]) =
-    ZIO succeed landingsSummaryByDateByLocationTable(dates, locations).toMultiMap
+    ZStream fromIterable landingsSummaryByDateByLocationTable(dates, locations)
 
   def landingsSummaryByDateBySpecie(dates: Set[YearMonth], species: Set[Specie]) =
-    ZIO succeed landingsSummaryByDateBySpecieTable(dates, species).toMultiMap
+    ZStream fromIterable landingsSummaryByDateBySpecieTable(dates, species)
 
   def landingsSummaryByDateByFleet(dates: Set[YearMonth], fleets: Set[Fleet]) =
-    ZIO succeed landingsSummaryByDateByFleetTable(dates, fleets).toMultiMap
+    ZStream fromIterable landingsSummaryByDateByFleetTable(dates, fleets)
 
   def landingsByDate(dates: Set[YearMonth]) =
-    ZIO succeed landingsByDateTable(dates).map(landing => (landing.date, landing)).toMap
+    ZStream fromIterable landingsByDateTable(dates).map(landing => (landing.date, landing))
 
   def landingsByDateByLocation(dates: Set[YearMonth], locations: Set[Location]) =
-    ZIO succeed landingsByDateByLocationTable(dates, locations)
+    ZStream fromIterable landingsByDateByLocationTable(dates, locations)
       .map(landing => (landing.date, landing.location, landing))
-      .toMultiMap
 
   def landingsByDateBySpecie(dates: Set[YearMonth], species: Set[Specie]) =
-    ZIO succeed landingsByDateBySpecieTable(dates, species)
+    ZStream fromIterable landingsByDateBySpecieTable(dates, species)
       .map(landing => (landing.date, landing.specie, landing))
-      .toMultiMap
 
   def landingsByDateByFleet(dates: Set[YearMonth], fleets: Set[Fleet]) =
-    ZIO succeed landingsByDateByFleetTable(dates, fleets)
+    ZStream fromIterable landingsByDateByFleetTable(dates, fleets)
       .map(landing => (landing.date, landing.fleet, landing))
-      .toMultiMap
 
 }
 
