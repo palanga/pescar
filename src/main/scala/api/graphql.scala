@@ -7,6 +7,7 @@ import caliban.GraphQL.graphQL
 import caliban.RootResolver
 import caliban.Value.StringValue
 import caliban.schema.{ GenericSchema, Schema }
+import util.GeoDegree.{ Latitude, Longitude }
 
 object graphql extends GenericSchema[AppEnv] {
 
@@ -19,6 +20,9 @@ object graphql extends GenericSchema[AppEnv] {
       None,
       yearMonth => StringValue(yearMonth.atDay(1).format(ISO_LOCAL_DATE).dropRight(3)) // yyyy-mm-dd -> yyyy-mm
     )
+
+  implicit val latitudeSchema: Schema.Typeclass[Latitude]   = Schema.floatSchema.contramap(_.value)
+  implicit val longitudeSchema: Schema.Typeclass[Longitude] = Schema.floatSchema.contramap(_.value)
 
   case class Queries(
     landings: resolvers.LandingsSummaryResolver,
