@@ -4,10 +4,24 @@ import java.time.YearMonth
 
 import api.database.landings.landings_summary_tables._
 import api.database.landings.landings_tables._
-import api.types.{ Fleet, Location, Specie }
+import api.types.{ Filter, Fleet, Location, Specie }
 import zio.stream.ZStream
 
 object Dummy {
+
+  // TODO
+  def landingsFromFilter(filter: Filter) =
+    landingsByDate(filter.dates)
+      .filter(
+        landing =>
+          (filter.locations contains landing.location.name) &&
+            (filter.species contains landing.specie.name) &&
+            (filter.fleets contains landing.fleet.name)
+      )
+
+  // TODO
+  def landingsSummaryFromFilter(filter: Filter) =
+    landingsFromFilter(filter).map(_.catchCount).fold(0)(_ + _)
 
   def landingsSummaryByDate(dates: Set[YearMonth]) =
     ZStream fromIterable landingsSummaryByDateTable(dates)
@@ -22,7 +36,7 @@ object Dummy {
     ZStream fromIterable landingsSummaryByDateByFleetTable(dates, fleets)
 
   def landingsByDate(dates: Set[YearMonth]) =
-    ZStream fromIterable landingsByDateTable(dates).map(landing => (landing.date, landing))
+    ZStream fromIterable landingsByDateTable(dates)
 
   def landingsByDateByLocation(dates: Set[YearMonth], locations: Set[Location]) =
     ZStream fromIterable landingsByDateByLocationTable(dates, locations)
@@ -134,10 +148,16 @@ object landings_tables {
   private val MarDelPlata  = Location.Harbour("Mar del Plata", util.GeoLocation.zero)
   private val PuertoMadryn = Location.Harbour("Puerto Madryn", util.GeoLocation.zero)
 
+  val LOCATIONS_ALL = Set(MarDelPlata, PuertoMadryn)
+
   private val Langostino = Specie("Langostino")
   private val Pulpo      = Specie("Pulpo")
 
-  private val emptyFleet = Fleet("")
+  val SPECIES_ALL = Set(Langostino, Pulpo)
+
+  private val emptyFleet = Fleet("Rada o Ría")
+
+  val FLEETS_ALL = Set(emptyFleet)
 
   private val all = List(
     Landing(YearMonth.of(2017, 7), MarDelPlata, Langostino, emptyFleet, 2),

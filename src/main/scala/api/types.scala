@@ -19,14 +19,13 @@ object types {
 
     final case class LandingsSummary(
       total: Int = 0,
-      byLocation: Map[Location, LandingsSummary] = Map.empty,
-      bySpecie: Map[Specie, LandingsSummary] = Map.empty,
-      byFleet: Map[Fleet, LandingsSummary] = Map.empty,
     ) extends Metric
 
   }
 
-  sealed trait Location extends Any with Product with Serializable
+  sealed trait Location extends Any with Product with Serializable {
+    def name: String
+  }
   object Location {
     final case class Harbour(name: String, geoLocation: GeoLocation) extends Location
     final case class Miscellaneous(name: String)                     extends AnyVal with Location
@@ -35,5 +34,16 @@ object types {
   case class Specie(name: String) extends AnyVal
 
   case class Fleet(name: String) extends AnyVal
+
+  case class Filter(
+    dates: Set[YearMonth],
+    locations: Set[LocationName],
+    species: Set[SpecieName],
+    fleets: Set[FleetName],
+  )
+
+  type LocationName = String
+  type SpecieName   = String
+  type FleetName    = String
 
 }
