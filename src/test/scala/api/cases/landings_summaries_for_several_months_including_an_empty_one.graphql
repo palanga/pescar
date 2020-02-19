@@ -1,0 +1,28 @@
+{
+  landings(dates: ["2017-07", "2017-08", "2017-09"]) {
+    byDate {
+      key
+      value {
+        summary
+        byLocation {
+          key
+          value {
+            summary
+            bySpecie {
+              key
+              value {
+                summary
+                byFleet {
+                  key
+                  value {
+                    summary
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,34 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+  query: Queries
+}
+
+"A key-value pair of String and Node"
+type KVStringNode {
+  "Key"
+  key: String!
+  "Value"
+  value: Node!
+}
+
+type Landing {
+  catchCount: Int!
+  date: String!
+  fleet: String!
+  location: String!
+  specie: String!
+}
+
+type Node {
+  byDate: [KVStringNode!]!
+  byFleet: [KVStringNode!]!
+  byLocation: [KVStringNode!]!
+  bySpecie: [KVStringNode!]!
+  landings: Landing!
+  summary: Int!
+}
+
+type Queries {
+  landings(dates: [String!]!, fleets: [String!], locations: [String!], species: [String!]): Node!
+}

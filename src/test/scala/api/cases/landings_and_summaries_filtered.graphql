@@ -1,0 +1,64 @@
+{
+  landings(dates: ["2017-07"], locations: ["Puerto Madryn"], species: ["Langostino", "Pulpo"], fleets: ["Rada o Ría", "Fresqueros"]) {
+    summary
+    landings {
+      date
+      location
+      specie
+      fleet
+      catchCount
+    }
+    byDate {
+      key
+      value {
+        summary
+        landings {
+          date
+          location
+          specie
+          fleet
+          catchCount
+        }
+        byLocation {
+          key
+          value {
+            summary
+            landings {
+              date
+              location
+              specie
+              fleet
+              catchCount
+            }
+            bySpecie {
+              key
+              value {
+                summary
+                landings {
+                  date
+                  location
+                  specie
+                  fleet
+                  catchCount
+                }
+                byFleet {
+                  key
+                  value {
+                    summary
+                    landings {
+                      date
+                      location
+                      specie
+                      fleet
+                      catchCount
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

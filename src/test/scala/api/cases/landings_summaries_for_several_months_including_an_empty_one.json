@@ -1,0 +1,320 @@
+{
+  "data": {
+    "landings": {
+      "byDate": [
+        {
+          "key": "2017-07",
+          "value": {
+            "summary": 7,
+            "byLocation": [
+              {
+                "key": "Mar del Plata",
+                "value": {
+                  "summary": 5,
+                  "bySpecie": [
+                    {
+                      "key": "Langostino",
+                      "value": {
+                        "summary": 2,
+                        "byFleet": [
+                          {
+                            "key": "Fresqueros",
+                            "value": {
+                              "summary": 0
+                            }
+                          },
+                          {
+                            "key": "Rada o Ría",
+                            "value": {
+                              "summary": 2
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "key": "Pulpo",
+                      "value": {
+                        "summary": 3,
+                        "byFleet": [
+                          {
+                            "key": "Fresqueros",
+                            "value": {
+                              "summary": 0
+                            }
+                          },
+                          {
+                            "key": "Rada o Ría",
+                            "value": {
+                              "summary": 3
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "key": "Puerto Madryn",
+                "value": {
+                  "summary": 2,
+                  "bySpecie": [
+                    {
+                      "key": "Langostino",
+                      "value": {
+                        "summary": 1,
+                        "byFleet": [
+                          {
+                            "key": "Fresqueros",
+                            "value": {
+                              "summary": 0
+                            }
+                          },
+                          {
+                            "key": "Rada o Ría",
+                            "value": {
+                              "summary": 1
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "key": "Pulpo",
+                      "value": {
+                        "summary": 1,
+                        "byFleet": [
+                          {
+                            "key": "Fresqueros",
+                            "value": {
+                              "summary": 1
+                            }
+                          },
+                          {
+                            "key": "Rada o Ría",
+                            "value": {
+                              "summary": 0
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "key": "2017-08",
+          "value": {
+            "summary": 30,
+            "byLocation": [
+              {
+                "key": "Mar del Plata",
+                "value": {
+                  "summary": 17,
+                  "bySpecie": [
+                    {
+                      "key": "Langostino",
+                      "value": {
+                        "summary": 10,
+                        "byFleet": [
+                          {
+                            "key": "Fresqueros",
+                            "value": {
+                              "summary": 0
+                            }
+                          },
+                          {
+                            "key": "Rada o Ría",
+                            "value": {
+                              "summary": 10
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "key": "Pulpo",
+                      "value": {
+                        "summary": 7,
+                        "byFleet": [
+                          {
+                            "key": "Fresqueros",
+                            "value": {
+                              "summary": 0
+                            }
+                          },
+                          {
+                            "key": "Rada o Ría",
+                            "value": {
+                              "summary": 7
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "key": "Puerto Madryn",
+                "value": {
+                  "summary": 13,
+                  "bySpecie": [
+                    {
+                      "key": "Langostino",
+                      "value": {
+                        "summary": 9,
+                        "byFleet": [
+                          {
+                            "key": "Fresqueros",
+                            "value": {
+                              "summary": 0
+                            }
+                          },
+                          {
+                            "key": "Rada o Ría",
+                            "value": {
+                              "summary": 9
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "key": "Pulpo",
+                      "value": {
+                        "summary": 4,
+                        "byFleet": [
+                          {
+                            "key": "Fresqueros",
+                            "value": {
+                              "summary": 4
+                            }
+                          },
+                          {
+                            "key": "Rada o Ría",
+                            "value": {
+                              "summary": 0
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "key": "2017-09",
+          "value": {
+            "summary": 0,
+            "byLocation": [
+              {
+                "key": "Mar del Plata",
+                "value": {
+                  "summary": 0,
+                  "bySpecie": [
+                    {
+                      "key": "Langostino",
+                      "value": {
+                        "summary": 0,
+                        "byFleet": [
+                          {
+                            "key": "Fresqueros",
+                            "value": {
+                              "summary": 0
+                            }
+                          },
+                          {
+                            "key": "Rada o Ría",
+                            "value": {
+                              "summary": 0
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "key": "Pulpo",
+                      "value": {
+                        "summary": 0,
+                        "byFleet": [
+                          {
+                            "key": "Fresqueros",
+                            "value": {
+                              "summary": 0
+                            }
+                          },
+                          {
+                            "key": "Rada o Ría",
+                            "value": {
+                              "summary": 0
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "key": "Puerto Madryn",
+                "value": {
+                  "summary": 0,
+                  "bySpecie": [
+                    {
+                      "key": "Langostino",
+                      "value": {
+                        "summary": 0,
+                        "byFleet": [
+                          {
+                            "key": "Fresqueros",
+                            "value": {
+                              "summary": 0
+                            }
+                          },
+                          {
+                            "key": "Rada o Ría",
+                            "value": {
+                              "summary": 0
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "key": "Pulpo",
+                      "value": {
+                        "summary": 0,
+                        "byFleet": [
+                          {
+                            "key": "Fresqueros",
+                            "value": {
+                              "summary": 0
+                            }
+                          },
+                          {
+                            "key": "Rada o Ría",
+                            "value": {
+                              "summary": 0
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

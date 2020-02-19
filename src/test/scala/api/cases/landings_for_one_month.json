@@ -1,0 +1,36 @@
+{
+  "data": {
+    "landings": {
+      "landings": [
+        {
+          "date": "2017-07",
+          "location": "Mar del Plata",
+          "specie": "Langostino",
+          "fleet": "Rada o Ría",
+          "catchCount": 2
+        },
+        {
+          "date": "2017-07",
+          "location": "Mar del Plata",
+          "specie": "Pulpo",
+          "fleet": "Rada o Ría",
+          "catchCount": 3
+        },
+        {
+          "date": "2017-07",
+          "location": "Puerto Madryn",
+          "specie": "Langostino",
+          "fleet": "Rada o Ría",
+          "catchCount": 1
+        },
+        {
+          "date": "2017-07",
+          "location": "Puerto Madryn",
+          "specie": "Pulpo",
+          "fleet": "Fresqueros",
+          "catchCount": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,203 +1,37 @@
 package api
 
-import io.circe.literal._
-import util.syntax.ziointerop.stringops._
+import zio.ZIO
 import zio.test.Assertion.equalTo
-import zio.test.{ assert, suite, testM, DefaultRunnableSpec, TestAspect }
+import zio.test.{ assert, suite, testM, DefaultRunnableSpec }
 
 object TestMain
     extends DefaultRunnableSpec(
       suite("graphql api")(
-        testM("landings summary by date for one month") {
-          val query =
-            """
-              |{
-              |  landings {
-              |    byDate(dates: ["2017-07"]) {
-              |      key
-              |      value { leaf { summary } }
-              |    }
-              |  }
-              |}""".stripMargin
-
-          val expected =
-            json"""
-                {
-                  "data": {
-                    "landings": {
-                      "byDate": [
-                        { "key": "2017-07", "value": { "leaf": { "summary": 7 } } }
-                      ]
-                    }
-                  }
-                }
-              """
-
-          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
-        },
-        testM("landings summary by date for one month") {
-          val query =
-            """
-              |{
-              |  landings {
-              |    byDate(dates: ["2017-07"]) {
-              |      key
-              |      value {
-              |        leaf {
-              |          summary
-              |        }
-              |        children {
-              |          bySpecie {
-              |            key {
-              |              name
-              |            }
-              |            value {
-              |              leaf {
-              |                summary
-              |              }
-              |            }
-              |          }
-              |        }
-              |      }
-              |    }
-              |  }
-              |}""".stripMargin
-
-          val expected =
-            json"""
-                {
-                  "data": {
-                    "landings": {
-                      "byDate": [
-                        { "key": "2017-07", "value": { "leaf": { "summary": 7 } } }
-                      ]
-                    }
-                  }
-                }
-              """
-
-          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
-        },
-        testM("group by date and then by location and then by specie") {
-
-          val query =
-            """
-              |{
-              |	 landings {
-              |    byDate {
-              |      key
-              |      value {
-              |        total
-              |        byLocation {
-              |          key
-              |          value {
-              |            total
-              |            bySpecie {
-              |              key
-              |              value {
-              |                total
-              |              }
-              |            }
-              |          }
-              |        }
-              |      }
-              |    }
-              |  }
-              |}
-              |""".stripMargin
-
-          val expected =
-            json"""{
-              "data": {
-                "landings": {
-                  "byDate": [
-                    {
-                      "key": "2017-07",
-                      "value": {
-                        "total": 7,
-                        "byLocation": [
-                          {
-                            "key": "Mar del Plata",
-                            "value": {
-                              "total": 5,
-                              "bySpecie": [
-                                {
-                                  "key": "Langostino",
-                                  "value": { "total": 2 }
-                                },
-                                {
-                                  "key": "Pulpo",
-                                  "value": { "total": 3}
-                                }
-                              ]
-                            }
-                          },
-                          {
-                            "key": "Puerto Madryn",
-                            "value": {
-                              "total": 2,
-                              "bySpecie": [
-                                {
-                                  "key": "Langostino",
-                                  "value": { "total": 1 }
-                                },
-                                {
-                                  "key": "Pulpo",
-                                  "value": { "total": 1 }
-                                }
-                              ]
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "key": "2017-08",
-                      "value": {
-                        "total": 30,
-                        "byLocation": [
-                          {
-                            "key": "Mar del Plata",
-                            "value": {
-                              "total": 17,
-                              "bySpecie": [
-                                {
-                                  "key": "Langostino",
-                                  "value": { "total": 10 }
-                                },
-                                {
-                                  "key": "Pulpo",
-                                  "value": { "total": 7 }
-                                }
-                              ]
-                            }
-                          },
-                          {
-                            "key": "Puerto Madryn",
-                            "value": {
-                              "total": 13,
-                              "bySpecie": [
-                                {
-                                  "key": "Langostino",
-                                  "value": { "total": 9 }
-                                },
-                                {
-                                  "key": "Pulpo",
-                                  "value": { "total": 4 }
-                                }
-                              ]
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              }
-            }"""
-
-          query.runOn(Main.httpApp) map (assert(_, equalTo(expected)))
-
-        } @@ TestAspect.ignore,
+        List(
+          "landings and summaries filtered",
+          "landings for one month",
+          "landings for several months including an empty one",
+          "landings summaries for several months including an empty one",
+          "landings summary for one month",
+        ).map(aux.buildTestCase): _*
       )
     )
+
+object aux {
+
+  import io.circe.parser.parse
+  import io.circe.syntax._
+
+  def buildTestCase(name: String) = testM(name) { aux runTestCase name.replace(' ', '_') }
+
+  // TODO diffson
+  private def runTestCase(name: String) =
+    for {
+      userDir                 <- zio.system.property("user.dir").someOrFailException.provide(zio.system.System.Live)
+      path                    = userDir ++ "/src/test/scala/api/cases"
+      loadAndExecuteQuery     = io.file.open(s"$path/$name.graphql") flatMap (Main.api.interpreter.execute(_))
+      loadAndParseExpected    = io.file.open(s"$path/$name.json") flatMap (ZIO fromEither parse(_))
+      (gqlResponse, expected) <- loadAndExecuteQuery zipPar loadAndParseExpected
+    } yield assert(gqlResponse.asJson, equalTo(expected))
+
+}

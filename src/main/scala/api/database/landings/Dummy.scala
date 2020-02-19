@@ -155,19 +155,20 @@ object landings_tables {
 
   val SPECIES_ALL = Set(Langostino, Pulpo)
 
-  private val emptyFleet = Fleet("Rada o Ría")
+  private val RadaORia   = Fleet("Rada o Ría")
+  private val Fresqueros = Fleet("Fresqueros")
 
-  val FLEETS_ALL = Set(emptyFleet)
+  val FLEETS_ALL = Set(RadaORia, Fresqueros)
 
   private val all = List(
-    Landing(YearMonth.of(2017, 7), MarDelPlata, Langostino, emptyFleet, 2),
-    Landing(YearMonth.of(2017, 7), MarDelPlata, Pulpo, emptyFleet, 3),
-    Landing(YearMonth.of(2017, 7), PuertoMadryn, Langostino, emptyFleet, 1),
-    Landing(YearMonth.of(2017, 7), PuertoMadryn, Pulpo, emptyFleet, 1),
-    Landing(YearMonth.of(2017, 8), MarDelPlata, Langostino, emptyFleet, 10),
-    Landing(YearMonth.of(2017, 8), MarDelPlata, Pulpo, emptyFleet, 7),
-    Landing(YearMonth.of(2017, 8), PuertoMadryn, Langostino, emptyFleet, 9),
-    Landing(YearMonth.of(2017, 8), PuertoMadryn, Pulpo, emptyFleet, 4),
+    Landing(YearMonth.of(2017, 7), MarDelPlata, Langostino, RadaORia, 2),
+    Landing(YearMonth.of(2017, 7), MarDelPlata, Pulpo, RadaORia, 3),
+    Landing(YearMonth.of(2017, 7), PuertoMadryn, Langostino, RadaORia, 1),
+    Landing(YearMonth.of(2017, 7), PuertoMadryn, Pulpo, Fresqueros, 1),
+    Landing(YearMonth.of(2017, 8), MarDelPlata, Langostino, RadaORia, 10),
+    Landing(YearMonth.of(2017, 8), MarDelPlata, Pulpo, RadaORia, 7),
+    Landing(YearMonth.of(2017, 8), PuertoMadryn, Langostino, RadaORia, 9),
+    Landing(YearMonth.of(2017, 8), PuertoMadryn, Pulpo, Fresqueros, 4),
   )
 
 }

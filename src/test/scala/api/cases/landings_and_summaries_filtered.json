@@ -1,0 +1,151 @@
+{
+  "data": {
+    "landings": {
+      "summary": 2,
+      "landings": [
+        {
+          "date": "2017-07",
+          "location": "Puerto Madryn",
+          "specie": "Langostino",
+          "fleet": "Rada o Ría",
+          "catchCount": 1
+        },
+        {
+          "date": "2017-07",
+          "location": "Puerto Madryn",
+          "specie": "Pulpo",
+          "fleet": "Fresqueros",
+          "catchCount": 1
+        }
+      ],
+      "byDate": [
+        {
+          "key": "2017-07",
+          "value": {
+            "summary": 2,
+            "landings": [
+              {
+                "date": "2017-07",
+                "location": "Puerto Madryn",
+                "specie": "Langostino",
+                "fleet": "Rada o Ría",
+                "catchCount": 1
+              },
+              {
+                "date": "2017-07",
+                "location": "Puerto Madryn",
+                "specie": "Pulpo",
+                "fleet": "Fresqueros",
+                "catchCount": 1
+              }
+            ],
+            "byLocation": [
+              {
+                "key": "Puerto Madryn",
+                "value": {
+                  "summary": 2,
+                  "landings": [
+                    {
+                      "date": "2017-07",
+                      "location": "Puerto Madryn",
+                      "specie": "Langostino",
+                      "fleet": "Rada o Ría",
+                      "catchCount": 1
+                    },
+                    {
+                      "date": "2017-07",
+                      "location": "Puerto Madryn",
+                      "specie": "Pulpo",
+                      "fleet": "Fresqueros",
+                      "catchCount": 1
+                    }
+                  ],
+                  "bySpecie": [
+                    {
+                      "key": "Langostino",
+                      "value": {
+                        "summary": 1,
+                        "landings": [
+                          {
+                            "date": "2017-07",
+                            "location": "Puerto Madryn",
+                            "specie": "Langostino",
+                            "fleet": "Rada o Ría",
+                            "catchCount": 1
+                          }
+                        ],
+                        "byFleet": [
+                          {
+                            "key": "Fresqueros",
+                            "value": {
+                              "summary": 0,
+                              "landings": []
+                            }
+                          },
+                          {
+                            "key": "Rada o Ría",
+                            "value": {
+                              "summary": 1,
+                              "landings": [
+                                {
+                                  "date": "2017-07",
+                                  "location": "Puerto Madryn",
+                                  "specie": "Langostino",
+                                  "fleet": "Rada o Ría",
+                                  "catchCount": 1
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "key": "Pulpo",
+                      "value": {
+                        "summary": 1,
+                        "landings": [
+                          {
+                            "date": "2017-07",
+                            "location": "Puerto Madryn",
+                            "specie": "Pulpo",
+                            "fleet": "Fresqueros",
+                            "catchCount": 1
+                          }
+                        ],
+                        "byFleet": [
+                          {
+                            "key": "Fresqueros",
+                            "value": {
+                              "summary": 1,
+                              "landings": [
+                                {
+                                  "date": "2017-07",
+                                  "location": "Puerto Madryn",
+                                  "specie": "Pulpo",
+                                  "fleet": "Fresqueros",
+                                  "catchCount": 1
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "key": "Rada o Ría",
+                            "value": {
+                              "summary": 0,
+                              "landings": []
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
