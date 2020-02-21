@@ -4,25 +4,6 @@ object ziointerop {
 
   import zio.ZIO
 
-  object stringops {
-
-    import api.Main.AppTask
-    import io.circe.Json
-    import io.circe.literal._
-    import org.http4s._
-    import org.http4s.circe._
-    import org.http4s.implicits._
-    import zio.interop.catz._
-
-    implicit class StringOps(self: String) {
-
-      def runOn(httpApp: HttpApp[AppTask], uri: Uri = uri"/api", method: Method = Method.POST) =
-        httpApp.run(Request(method, uri).withEntity(json"""{ "query": $self }""")) flatMap (_.as[Json])
-
-    }
-
-  }
-
   object iterableops {
 
     implicit final class IterableOps[-R, +E, +A](private val self: Iterable[ZIO[R, E, A]]) extends AnyVal {
