@@ -13,8 +13,8 @@ object LoadTest
       suite("datos.gob.consumer.loadtest")(
         testM("load test db") {
 
-          import util.syntax.ziointerop.iterableops._
-          import util.syntax.zioops._
+          import utils.zio.syntax.ziointerop.iterableops._
+          import utils.zio.syntax.zioops._
 
           val TIMES = 10
 

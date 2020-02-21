@@ -3,7 +3,7 @@ lazy val root = project
   .settings(name := "analytics")
   .settings(version := "0.1")
   .settings(skip in publish := true)
-  .aggregate(core, time)
+  .aggregate(core, time, utils, zioUtils)
 
 val commonSettings = Def.settings(
   scalaVersion := "2.13.1",
@@ -18,7 +18,7 @@ lazy val core =
     .settings(libraryDependencies := (Dependencies.api ++ Dependencies.consumer).toSeq)
     .settings(testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")))
     .settings(fork in Test := true)
-    .dependsOn(time, utils)
+    .dependsOn(time, utils, zioUtils)
 
 lazy val time =
   project
@@ -31,5 +31,12 @@ lazy val utils =
     .in(file("utils"))
     .settings(name := "utils")
     .settings(commonSettings)
+
+lazy val zioUtils =
+  project
+    .in(file("zio-utils"))
+    .settings(name := "utils.zio")
+    .settings(commonSettings)
+    .settings(libraryDependencies := Dependencies.zioUtils.toSeq)
 
 //Revolver.settings

@@ -1,4 +1,4 @@
-package util.syntax
+package utils.zio.syntax
 
 object ziointerop {
 

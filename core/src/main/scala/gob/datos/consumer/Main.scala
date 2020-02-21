@@ -17,7 +17,7 @@ object Main extends App {
    */
   override def run(args: List[String]): ZIO[ZEnv, Nothing, Int] = {
 
-    import util.syntax.zioops._
+    import utils.zio.syntax.zioops._
 
     (loadDataFromCsv zipPar loadDataFromApi)
       .map { case (csvData, apiData) => csvData ++ apiData }
@@ -76,7 +76,7 @@ object Main extends App {
    */
   private val loadDataFromApi = {
 
-    import util.syntax.zioops._
+    import utils.zio.syntax.zioops._
 
     val INITIAL_OFFSET = 0
     val PAGE_SIZE      = 100

@@ -35,6 +35,13 @@ object Dependencies {
     sttpCore,
   )
 
+  val zioUtils = Set(
+    doobieCore,
+    zio,
+    zioInteropCats,
+    zioStreams,
+  )
+
 }
 
 object Definitions {
@@ -67,18 +74,21 @@ object Definitions {
   val zioTest    = "dev.zio" %% "zio-test"     % Versions.zio % Test
   val zioTestSbt = "dev.zio" %% "zio-test-sbt" % Versions.zio % Test
 
+  val zioInteropCats = "dev.zio" %% "zio-interop-cats" % Versions.zioInteropCats
+
   val zioNio = "dev.zio" %% "zio-nio" % Versions.zioNio
 
 }
 
 object Versions {
-  val caliban    = "0.5.2"
-  val circe      = "0.13.0"
-  val doobie     = "0.8.6"
-  val http4s     = "0.21.1"
-  val logback    = "1.2.3"
-  val pureconfig = "0.12.2"
-  val sttp       = "2.0.0-RC5"
-  val zio        = "1.0.0-RC17"
-  val zioNio     = "0.4.0"
+  val caliban        = "0.5.2"
+  val circe          = "0.13.0"
+  val doobie         = "0.8.6"
+  val http4s         = "0.21.1"
+  val logback        = "1.2.3"
+  val pureconfig     = "0.12.2"
+  val sttp           = "2.0.0-RC5"
+  val zio            = "1.0.0-RC17"
+  val zioInteropCats = "2.0.0.0-RC10"
+  val zioNio         = "0.4.0"
 }
