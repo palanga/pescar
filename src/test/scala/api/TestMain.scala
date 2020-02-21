@@ -7,13 +7,21 @@ import zio.test.{ assert, suite, testM, DefaultRunnableSpec }
 object TestMain
     extends DefaultRunnableSpec(
       suite("graphql api")(
-        List(
-          "landings and summaries filtered",
-          "landings for one month",
-          "landings for several months including an empty one",
-          "landings summaries for several months including an empty one",
-          "landings summary for one month",
-        ).map(aux.buildTestCase): _*
+        testM("landings and summaries filtered") {
+          aux runTestCase "landings and summaries filtered"
+        },
+        testM("landings for one month") {
+          aux runTestCase "landings for one month"
+        },
+        testM("landings for several months including an empty one") {
+          aux runTestCase "landings for several months including an empty one"
+        },
+        testM("landings summaries for several months including an empty one") {
+          aux runTestCase "landings summaries for several months including an empty one"
+        },
+        testM("landings summary for one month") {
+          aux runTestCase "landings summary for one month"
+        },
       )
     )
 
@@ -22,15 +30,14 @@ object aux {
   import io.circe.parser.parse
   import io.circe.syntax._
 
-  def buildTestCase(name: String) = testM(name) { aux runTestCase name.replace(' ', '_') }
-
   // TODO diffson
-  private def runTestCase(name: String) =
+  def runTestCase(name: String) =
     for {
       userDir                 <- zio.system.property("user.dir").someOrFailException.provide(zio.system.System.Live)
       path                    = userDir ++ "/src/test/scala/api/cases"
-      loadAndExecuteQuery     = io.file.open(s"$path/$name.graphql") flatMap (Main.api.interpreter.execute(_))
-      loadAndParseExpected    = io.file.open(s"$path/$name.json") flatMap (ZIO fromEither parse(_))
+      fileName                = name replace (' ', '_')
+      loadAndExecuteQuery     = io.file.open(s"$path/$fileName.graphql") flatMap (Main.api.interpreter.execute(_))
+      loadAndParseExpected    = io.file.open(s"$path/$fileName.json") flatMap (ZIO fromEither parse(_))
       (gqlResponse, expected) <- loadAndExecuteQuery zipPar loadAndParseExpected
     } yield assert(gqlResponse.asJson, equalTo(expected))
 

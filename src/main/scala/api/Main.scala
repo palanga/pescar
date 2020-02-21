@@ -14,11 +14,10 @@ object Main extends App {
   type AppEnv     = Clock
   type AppTask[A] = RIO[AppEnv, A]
 
-
   override def run(args: List[String]): ZIO[ZEnv, Nothing, Int] =
     zio.console.putStrLn(api.render) *> makeServer.orDie map (_ => 0)
 
-  val api = schema.make
+  val api     = schema.make
   val httpApp = routes withInterpreter api.interpreter
 
   private val makeServer: ZIO[AppEnv, Throwable, Unit] =

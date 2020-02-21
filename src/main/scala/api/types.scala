@@ -14,11 +14,11 @@ object types {
       location: Location,
       specie: Specie,
       fleet: Fleet,
-      catchCount: Int = 0,
+      catchCount: Int,
     ) extends Metric
 
     final case class LandingsSummary(
-      total: Int = 0,
+      total: Int,
     ) extends Metric
 
   }

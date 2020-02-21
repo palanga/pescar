@@ -19,12 +19,12 @@ object types {
   )
 
   case class Node(
-    landings: Stream[Nothing, Landing] = Stream.empty,
-    summary: UIO[LandingsSummary] = UIO effectTotal LandingsSummary(),
-    byDate: UIO[Map[YearMonth, Node]] = UIO effectTotal Map.empty,
-    byLocation: UIO[Map[LocationName, Node]] = UIO effectTotal Map.empty,
-    bySpecie: UIO[Map[SpecieName, Node]] = UIO effectTotal Map.empty,
-    byFleet: UIO[Map[FleetName, Node]] = UIO effectTotal Map.empty,
+    landings: Stream[Nothing, Landing],
+    summary: UIO[LandingsSummary],
+    byDate: UIO[Map[YearMonth, Node]],
+    byLocation: UIO[Map[LocationName, Node]],
+    bySpecie: UIO[Map[SpecieName, Node]],
+    byFleet: UIO[Map[FleetName, Node]],
   )
 
 }
