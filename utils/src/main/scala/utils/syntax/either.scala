@@ -1,6 +1,6 @@
-package util.syntax
+package utils.syntax
 
-object eitherops {
+object either {
 
   implicit final class EitherOps[+E, +A](private val self: Either[E, A]) extends AnyVal {
 

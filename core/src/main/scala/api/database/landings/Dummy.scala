@@ -56,7 +56,7 @@ object landings_summary_tables {
 
   import api.types.Metric.Landing
   import landings_tables.{ landingsByDateByKeyTable, landingsByDateTable }
-  import util.syntax.tupleops._
+  import utils.syntax.tuple._
 
   /**
    * date | total
@@ -145,8 +145,8 @@ object landings_tables {
   def landingsByDateByKeyTable[K](dates: Set[YearMonth], ks: Set[K], getKey: Landing => K) =
     landingsByDateTable(dates).filter(landing => ks contains getKey(landing))
 
-  private val MarDelPlata  = Location.Harbour("Mar del Plata", util.GeoLocation.zero)
-  private val PuertoMadryn = Location.Harbour("Puerto Madryn", util.GeoLocation.zero)
+  private val MarDelPlata  = Location.Harbour("Mar del Plata", utils.GeoLocation.zero)
+  private val PuertoMadryn = Location.Harbour("Puerto Madryn", utils.GeoLocation.zero)
 
   val LOCATIONS_ALL = Set(MarDelPlata, PuertoMadryn)
 

@@ -18,12 +18,18 @@ lazy val core =
     .settings(libraryDependencies := (Dependencies.api ++ Dependencies.consumer).toSeq)
     .settings(testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")))
     .settings(fork in Test := true)
-    .dependsOn(time)
+    .dependsOn(time, utils)
 
 lazy val time =
   project
     .in(file("time"))
     .settings(name := "time")
+    .settings(commonSettings)
+
+lazy val utils =
+  project
+    .in(file("utils"))
+    .settings(name := "utils")
     .settings(commonSettings)
 
 //Revolver.settings

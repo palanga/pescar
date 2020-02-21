@@ -17,7 +17,7 @@ object file {
    */
   def openResource(resourcePath: String) =
     ZIO
-      .fromOption(util.Option.fromNullabe(this.getClass.getResource(resourcePath)))
+      .fromOption(utils.Option.fromNullabe(this.getClass.getResource(resourcePath)))
       .map(_.getFile)
       .asError(new java.io.IOException(s"Resource not found: $resourcePath"))
       .flatMap(open)

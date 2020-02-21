@@ -10,7 +10,7 @@ import api.types.{ Fleet, Location, Specie }
 import caliban.GraphQL.graphQL
 import caliban.schema.{ ArgBuilder, GenericSchema, Schema }
 import caliban.{ CalibanError, RootResolver }
-import util.GeoDegree.{ Latitude, Longitude }
+import utils.GeoDegree.{ Latitude, Longitude }
 
 object schema extends GenericSchema[AppEnv] {
 

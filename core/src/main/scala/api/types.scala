@@ -2,7 +2,7 @@ package api
 
 import java.time.YearMonth
 
-import util.GeoLocation
+import utils.GeoLocation
 
 object types {
 

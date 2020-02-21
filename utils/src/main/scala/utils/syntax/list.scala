@@ -1,6 +1,6 @@
-package util.syntax
+package utils.syntax
 
-object listops {
+object list {
 
   implicit class TriadListOps[A, B, C](val self: List[(A, B, C)]) extends AnyVal {
 
