@@ -1,5 +1,8 @@
 package io
 
+import java.io.IOException
+
+import utils.Option
 import zio.ZIO
 import zio.nio.channels.AsynchronousFileChannel
 import zio.nio.file.Path
@@ -17,9 +20,9 @@ object file {
    */
   def openResource(resourcePath: String) =
     ZIO
-      .fromOption(utils.Option.fromNullabe(this.getClass.getResource(resourcePath)))
+      .fromOption(Option.fromNullabe(this.getClass.getResource(resourcePath)))
       .map(_.getFile)
-      .asError(new java.io.IOException(s"Resource not found: $resourcePath"))
+      .asError(new IOException(s"Resource not found: $resourcePath"))
       .flatMap(open)
 
   /**
@@ -42,7 +45,7 @@ object file {
     for {
       size <- channel.size
       wholeFile <- if (size > Int.MaxValue.toLong)
-                    ZIO.fail(new java.io.IOException(s"File too large: $size bytes"))
+                    ZIO.fail(new IOException(s"File too large: $size bytes"))
                   else channel.read(size.toInt, 0L)
       decoded <- Stream(wholeFile) // Create a stream just to use Sink.utf8DecodeChunk and Sink.splitLines
                   .aggregate(Sink.utf8DecodeChunk)
@@ -54,7 +57,7 @@ object file {
     for {
       size <- channel.size
       wholeFile <- if (size > Int.MaxValue.toLong)
-                    ZIO.fail(new java.io.IOException(s"File too large: $size bytes"))
+                    ZIO.fail(new IOException(s"File too large: $size bytes"))
                   else channel.read(size.toInt, 0L)
       decoded <- Stream(wholeFile) // Create a stream just to use Sink.utf8DecodeChunk and Sink.splitLines
                   .aggregate(Sink.utf8DecodeChunk)

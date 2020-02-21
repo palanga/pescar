@@ -18,7 +18,15 @@ lazy val core =
     .settings(libraryDependencies := (Dependencies.api ++ Dependencies.consumer).toSeq)
     .settings(testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")))
     .settings(fork in Test := true)
-    .dependsOn(time, utils, zioUtils)
+    .dependsOn(io, time, utils, zioUtils)
+
+lazy val io =
+  project
+    .in(file("io"))
+    .settings(name := "io")
+    .settings(commonSettings)
+    .settings(libraryDependencies := Dependencies.io.toSeq)
+    .dependsOn(utils)
 
 lazy val time =
   project

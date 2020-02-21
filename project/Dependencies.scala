@@ -35,6 +35,12 @@ object Dependencies {
     sttpCore,
   )
 
+  val io = Set(
+    zio,
+    zioNio,
+    zioStreams,
+  )
+
   val zioUtils = Set(
     doobieCore,
     zio,
