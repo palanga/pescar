@@ -8,7 +8,6 @@ object Dependencies {
   private val common = Set(
     logbackClassic,
     zio,
-    zioNio,
     zioStreams,
     zioTest,
     zioTestSbt,
@@ -17,6 +16,8 @@ object Dependencies {
   val api = common ++ Set(
     caliban,
     calibanHtt4s,
+    circeCore,// TODO just for test
+    circeParser,// TODO just for test
   )
 
   val config = Set(

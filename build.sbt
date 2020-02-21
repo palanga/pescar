@@ -3,12 +3,23 @@ lazy val root = project
   .settings(name := "analytics")
   .settings(version := "0.1")
   .settings(skip in publish := true)
-  .aggregate(core, time, utils, zioUtils)
+  .aggregate(api, config, core, io, time, utils, zioUtils)
 
 val commonSettings = Def.settings(
   scalaVersion := "2.13.1",
   scalacOptions := ScalaOptions.dev
 )
+
+lazy val api =
+  project
+    .in(file("api"))
+    .settings(name := "api")
+    .settings(commonSettings)
+    .settings(libraryDependencies := Dependencies.api.toSeq)
+    .settings(testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")))
+    .settings(fork in Test := true)
+    .dependsOn(time, zioUtils, utils)
+    .dependsOn(io)// TODO just for test
 
 lazy val config =
   project
