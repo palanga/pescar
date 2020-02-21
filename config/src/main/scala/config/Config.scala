@@ -13,3 +13,22 @@ case class DBConfig(
 )
 
 case class ServerConfig(host: Hostname, port: PortNumber)
+
+object Config {
+
+  val test =
+    Config(
+      DBConfig(
+        "org.postgresql.Driver",
+        "jdbc:postgresql://postgres:5432/test_datos_gob",
+        "palan",
+        "",
+        32
+      ),
+      ServerConfig(
+        "",
+        0
+      )
+    )
+
+}

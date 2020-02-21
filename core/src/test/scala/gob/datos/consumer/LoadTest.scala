@@ -64,8 +64,7 @@ object stress_helper {
   val dependencies =
     for {
       env    <- ZManaged.environment[Blocking]
-      config <- config.ConfigLoader.test.toManaged_
-      doobie <- DoobieLandingsDatabase.makeManaged(config.db)
+      doobie <- DoobieLandingsDatabase.makeManaged(config.Config.test.db)
     } yield {
       new Blocking with Clock.Live with Console.Live with LandingsDatabase {
         override val blocking         = env.blocking

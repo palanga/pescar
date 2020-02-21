@@ -10,6 +10,14 @@ val commonSettings = Def.settings(
   scalacOptions := ScalaOptions.dev
 )
 
+lazy val config =
+  project
+    .in(file("config"))
+    .settings(name := "config")
+    .settings(commonSettings)
+    .settings(libraryDependencies := Dependencies.config.toSeq)
+    .dependsOn(io)
+
 lazy val core =
   project
     .in(file("core"))
@@ -18,7 +26,7 @@ lazy val core =
     .settings(libraryDependencies := (Dependencies.api ++ Dependencies.consumer).toSeq)
     .settings(testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")))
     .settings(fork in Test := true)
-    .dependsOn(io, time, utils, zioUtils)
+    .dependsOn(config, io, time, utils, zioUtils)
 
 lazy val io =
   project

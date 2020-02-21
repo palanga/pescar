@@ -47,8 +47,7 @@ object helper {
   val dependencies =
     for {
       env <- ZManaged.environment[Blocking]
-      config <- config.ConfigLoader.test.toManaged_
-      doobie <- DoobieLandingsDatabase.makeManaged(config.db)
+      doobie <- DoobieLandingsDatabase.makeManaged(config.Config.test.db)
       //      sttp   <- http.client.SttpClient.makeManaged
     } yield {
       new Blocking /*with Console*/ /*with HttpClient*/ with LandingsDatabase {

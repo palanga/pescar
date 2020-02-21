@@ -19,6 +19,12 @@ object Dependencies {
     calibanHtt4s,
   )
 
+  val config = Set(
+    pureconfig,
+    pureconfigYaml,
+    zio,
+  )
+
   val consumer = common ++ Set(
     circeCore,
     circeGeneric,
