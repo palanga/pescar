@@ -3,7 +3,7 @@ lazy val root = project
   .settings(name := "analytics")
   .settings(version := "0.1")
   .settings(skip in publish := true)
-  .aggregate(api, config, core, io, time, utils, zioUtils)
+  .aggregate(api, config, consumer, io, time, utils, zioUtils)
 
 val commonSettings = Def.settings(
   scalaVersion := "2.13.1",
@@ -19,7 +19,7 @@ lazy val api =
     .settings(testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")))
     .settings(fork in Test := true)
     .dependsOn(time, zioUtils, utils)
-    .dependsOn(io)// TODO just for test
+    .dependsOn(io % Test)
 
 lazy val config =
   project
@@ -29,12 +29,12 @@ lazy val config =
     .settings(libraryDependencies := Dependencies.config.toSeq)
     .dependsOn(io)
 
-lazy val core =
+lazy val consumer =
   project
-    .in(file("core"))
-    .settings(name := "core")
+    .in(file("consumer"))
+    .settings(name := "consumer")
     .settings(commonSettings)
-    .settings(libraryDependencies := (Dependencies.api ++ Dependencies.consumer).toSeq)
+    .settings(libraryDependencies := Dependencies.consumer.toSeq)
     .settings(testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")))
     .settings(fork in Test := true)
     .dependsOn(config, io, time, utils, zioUtils)
@@ -45,7 +45,6 @@ lazy val io =
     .settings(name := "io")
     .settings(commonSettings)
     .settings(libraryDependencies := Dependencies.io.toSeq)
-    .dependsOn(utils)
 
 lazy val time =
   project

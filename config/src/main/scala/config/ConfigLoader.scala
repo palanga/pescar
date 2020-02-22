@@ -1,18 +1,22 @@
 package config
 
-import io.file.openResource
+import io.file
 import pureconfig.module.yaml.YamlConfigSource
 import zio.ZIO
+import zio.system.property
 
 object ConfigLoader {
 
-  val loadYamlConfig = openResource("/conf.yaml") >>= loadYamlFromString
+  val loadYamlConfig =
+    property("user.dir").someOrFailException
+      .flatMap(file.open _ compose (_ ++ "/consumer/conf.yaml"))
+      .flatMap(loadYamlFromString)
 
-  private final def loadYamlFromString(confString: String) = {
+  private final def loadYamlFromString(file: String) = {
     import pureconfig.generic.auto._
     ZIO
-      .fromEither(YamlConfigSource.string(confString).load[Config])
-      .mapError(ConfigFailure.fromConfigReaderFailures)
+      .effect(YamlConfigSource.string(file).load[Config].left.map(ConfigFailure.fromConfigReaderFailures))
+      .flatMap(ZIO fromEither _)
   }
 
 }

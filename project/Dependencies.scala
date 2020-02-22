@@ -1,5 +1,4 @@
-import sbt.librarymanagement.syntax.stringToOrganization
-import sbt.librarymanagement.syntax.Test
+import sbt.librarymanagement.syntax.{ stringToOrganization, Test }
 
 object Dependencies {
 
@@ -16,8 +15,8 @@ object Dependencies {
   val api = common ++ Set(
     caliban,
     calibanHtt4s,
-    circeCore,// TODO just for test
-    circeParser,// TODO just for test
+    circeCore   % Test,
+    circeParser % Test,
   )
 
   val config = Set(
@@ -34,9 +33,8 @@ object Dependencies {
     doobieHikari,
     doobiePostgres,
     http4sBlaze,
+    http4sCirce,
     http4sDsl,
-    pureconfig,
-    pureconfigYaml,
     sttpAsyncBackendZio,
     sttpCirce,
     sttpCore,
@@ -71,6 +69,7 @@ object Definitions {
   val doobiePostgres = "org.tpolecat" %% "doobie-postgres" % Versions.doobie
 
   val http4sBlaze = "org.http4s" %% "http4s-blaze-client" % Versions.http4s
+  val http4sCirce = "org.http4s" %% "http4s-circe"        % Versions.http4s
   val http4sDsl   = "org.http4s" %% "http4s-dsl"          % Versions.http4s
 
   val logbackClassic = "ch.qos.logback" % "logback-classic" % Versions.logback

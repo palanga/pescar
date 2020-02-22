@@ -2,7 +2,6 @@ package io
 
 import java.io.IOException
 
-import utils.Option
 import zio.ZIO
 import zio.nio.channels.AsynchronousFileChannel
 import zio.nio.file.Path
@@ -14,16 +13,6 @@ object file {
    * Open a whole file as a String
    */
   def open(path: String) = openAsyncChannel(path).use(asString)
-
-  /**
-   * Open a whole resource file as a String
-   */
-  def openResource(resourcePath: String) =
-    ZIO
-      .fromOption(Option.fromNullabe(this.getClass.getResource(resourcePath)))
-      .map(_.getFile)
-      .asError(new IOException(s"Resource not found: $resourcePath"))
-      .flatMap(open)
 
   /**
    * List file lines
