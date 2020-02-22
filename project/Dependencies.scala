@@ -12,7 +12,7 @@ object Dependencies {
     zioTestSbt,
   )
 
-  val api = common ++ Set(
+  val analyticsApi = common ++ Set(
     caliban,
     calibanHtt4s,
     circeCore   % Test,
@@ -25,7 +25,7 @@ object Dependencies {
     zio,
   )
 
-  val consumer = common ++ Set(
+  val analyticsConsumer = common ++ Set(
     circeCore,
     circeGeneric,
     circeParser,
@@ -46,7 +46,7 @@ object Dependencies {
     zioStreams,
   )
 
-  val zioUtils = Set(
+  val utilsZio = Set(
     doobieCore,
     zio,
     zioInteropCats,

@@ -1,68 +1,82 @@
-lazy val root = project
-  .in(file("."))
-  .settings(name := "analytics")
-  .settings(version := "0.1")
-  .settings(skip in publish := true)
-  .aggregate(api, config, consumer, io, time, utils, zioUtils)
+lazy val root =
+  (project in file("."))
+    .settings(name := "pescar")
+    .settings(version := "0.1")
+    .settings(skip in publish := true)
+    .aggregate(
+      analyticsApi,
+      analyticsConsumer,
+      config,
+      io,
+      time,
+      utilsStd,
+      utilsZio,
+    )
 
-val commonSettings = Def.settings(
-  scalaVersion := "2.13.1",
-  scalacOptions := ScalaOptions.dev
-)
+val commonSettings =
+  Def.settings(
+    scalacOptions := ScalaOptions.dev,
+    scalaVersion := "2.13.1",
+  )
 
-lazy val api =
-  project
-    .in(file("api"))
-    .settings(name := "api")
+lazy val analyticsApi =
+  (project in file("analytics.api"))
+    .settings(name := "analytics.api")
     .settings(commonSettings)
-    .settings(libraryDependencies := Dependencies.api.toSeq)
     .settings(testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")))
     .settings(fork in Test := true)
-    .dependsOn(time, zioUtils, utils)
-    .dependsOn(io % Test)
+    .settings(libraryDependencies := Dependencies.analyticsApi.toSeq)
+    .dependsOn(
+      io % Test,
+      time,
+      utilsStd,
+      utilsZio,
+    )
+
+lazy val analyticsConsumer =
+  (project in file("analytics.consumer"))
+    .settings(name := "analytics.consumer")
+    .settings(commonSettings)
+    .settings(testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")))
+    .settings(fork in Test := true)
+    .settings(libraryDependencies := Dependencies.analyticsConsumer.toSeq)
+    .dependsOn(
+      config,
+      io,
+      time,
+      utilsStd,
+      utilsZio,
+    )
 
 lazy val config =
-  project
-    .in(file("config"))
+  (project in file("config"))
     .settings(name := "config")
     .settings(commonSettings)
     .settings(libraryDependencies := Dependencies.config.toSeq)
-    .dependsOn(io)
-
-lazy val consumer =
-  project
-    .in(file("consumer"))
-    .settings(name := "consumer")
-    .settings(commonSettings)
-    .settings(libraryDependencies := Dependencies.consumer.toSeq)
-    .settings(testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")))
-    .settings(fork in Test := true)
-    .dependsOn(config, io, time, utils, zioUtils)
+    .dependsOn(
+      io,
+    )
 
 lazy val io =
-  project
-    .in(file("io"))
+  (project in file("io"))
     .settings(name := "io")
     .settings(commonSettings)
     .settings(libraryDependencies := Dependencies.io.toSeq)
 
 lazy val time =
-  project
-    .in(file("time"))
+  (project in file("time"))
     .settings(name := "time")
     .settings(commonSettings)
 
-lazy val utils =
-  project
-    .in(file("utils"))
-    .settings(name := "utils")
+lazy val utilsStd =
+  (project in file("utils.std"))
+    .settings(name := "utils.std")
     .settings(commonSettings)
 
-lazy val zioUtils =
-  project
-    .in(file("zio-utils"))
+lazy val utilsZio =
+  (project in file("utils.zio"))
     .settings(name := "utils.zio")
     .settings(commonSettings)
-    .settings(libraryDependencies := Dependencies.zioUtils.toSeq)
+    .settings(libraryDependencies := Dependencies.utilsZio.toSeq)
 
 //Revolver.settings
