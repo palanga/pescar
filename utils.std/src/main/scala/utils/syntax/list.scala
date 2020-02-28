@@ -1,6 +1,14 @@
 package utils.syntax
 
+import scala.collection.immutable.SortedMap
+
 object list {
+
+  implicit class PairListOps[K, V](val self: List[(K, V)]) extends AnyVal {
+
+    def toSortedMap(implicit ord: Ordering[K]): SortedMap[K, V] = SortedMap from self
+
+  }
 
   implicit class TriadListOps[A, B, C](val self: List[(A, B, C)]) extends AnyVal {
 

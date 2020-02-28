@@ -4,9 +4,10 @@ import java.time.YearMonth
 
 import analytics.api.database.landings.Dummy._
 import analytics.api.database.landings.landings_tables.{ FLEETS_ALL, LOCATIONS_ALL, SPECIES_ALL }
-import types.{ Args, Node }
+import analytics.api.graphql.landings.types.{ Args, Node }
 import analytics.api.types.Metric.LandingsSummary
 import analytics.api.types.{ Filter, FleetName, LocationName, SpecieName }
+import utils.syntax.list.PairListOps
 import zio.UIO
 
 object resolver {
@@ -36,7 +37,7 @@ object resolver {
   ) =
     getKey(filter).toList match {
       case Nil  => Map.empty[K, Node]
-      case keys => keys.sorted.map(key => key -> fromFilter(updateFilter(filter, Set(key)))).toMap
+      case keys => keys.sorted.map(key => key -> fromFilter(updateFilter(filter, Set(key)))).toSortedMap
     }
 
   private implicit class FilterOps(val filter: Filter) extends AnyVal {
