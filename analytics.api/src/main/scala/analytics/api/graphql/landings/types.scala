@@ -9,7 +9,12 @@ import zio.stream.Stream
 
 object types {
 
-  case class Queries(landings: Args => Node)
+  case class Queries(
+    landings: Args => Node,
+    locations: UIO[List[LocationName]],
+    species: UIO[List[SpecieName]],
+    fleets: UIO[List[FleetName]],
+  )
 
   case class Args(
     dates: List[YearMonth],

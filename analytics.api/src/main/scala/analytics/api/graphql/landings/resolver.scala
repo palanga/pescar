@@ -12,6 +12,10 @@ import zio.UIO
 
 object resolver {
 
+  def locations = UIO succeed LOCATIONS_ALL.toList.map(_.name).sorted
+  def species   = UIO succeed SPECIES_ALL.toList.map(_.name).sorted
+  def fleets    = UIO succeed FLEETS_ALL.toList.map(_.name).sorted
+
   def fromArgs(args: Args) =
     fromFilter(
       Filter(
