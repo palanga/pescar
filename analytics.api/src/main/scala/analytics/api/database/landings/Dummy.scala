@@ -4,7 +4,7 @@ import java.time.YearMonth
 
 import analytics.api.database.landings.landings_summary_tables._
 import analytics.api.database.landings.landings_tables._
-import analytics.api.types.Location.Harbour
+import analytics.api.types.Location.{ Harbour, Miscellaneous }
 import analytics.api.types.Metric.Landing
 import analytics.api.types.{ Filter, Fleet, Location, Specie }
 import utils.GeoLocation
@@ -38,8 +38,42 @@ object Dummy {
   def landingsSummaryByDateByFleet(dates: Set[YearMonth], fleets: Set[Fleet]) =
     ZStream fromIterable landingsSummaryByDateByFleetTable(dates, fleets)
 
-  def landingsByDate(dates: Set[YearMonth]) =
-    ZStream fromIterable landingsByDateTable(dates)
+  val memo: scala.collection.mutable.Map[YearMonth, Landing] = scala.collection.mutable.Map.empty
+
+  def landingsByDate(dates: Set[YearMonth]) = {
+
+    import analytics.api.types.Metric.Landing
+    import analytics.consumer.gob.datos.database.landing.{ DoobieLandingsDatabase, LandingsDatabase }
+    import analytics.consumer.gob.datos.types.{ Landing => ConsumerLanding }
+
+    val managed = DoobieLandingsDatabase.makeManagedWithBlocking
+
+    def toApiLanding(landing: ConsumerLanding): Landing = landing match {
+      case ConsumerLanding(fecha, flota, puerto, _, _, _, _, lat, lon, _, especie, _, captura) =>
+        val location = (lat zip lon).fold[Location](Miscellaneous(puerto))(
+          geoLocation => Harbour(puerto, GeoLocation.fromFloatPairUnsafe(geoLocation))
+        )
+        Landing(fecha, location, Specie(especie), Fleet(flota), captura)
+    }
+
+    def fromDB(dates: Set[YearMonth]) =
+      LandingsDatabase.module
+        .find(dates)
+        .provideSomeManaged(managed)
+        .map(toApiLanding)
+        .catchAll(throw _)
+        .provide(zio.blocking.Blocking.Live)
+
+    //    val zioRes = fromDB(dates.filterNot(memo contains _))
+    //      .runCollect
+    //      .map(landings => memo ++= landings.map(landing => (landing.date, landing)))
+    //      .as(dates.map(date => memo(date)))
+    //
+    //    ZStream.fromEffect(zioRes).flatMap(ZStream.fromIterable)
+
+    fromDB(dates)
+
+  }
 
   def landingsByDateByLocation(dates: Set[YearMonth], locations: Set[Location]) =
     ZStream fromIterable landingsByDateByLocationTable(dates, locations)

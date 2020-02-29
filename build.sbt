@@ -31,6 +31,7 @@ lazy val analyticsApi =
       time,
       utilsStd,
       utilsZio,
+      analyticsConsumer,// TODO remove
     )
 
 lazy val analyticsConsumer =
