@@ -5,7 +5,7 @@ import java.time.YearMonth
 import analytics.api.types.Metric.{ Landing, LandingsSummary }
 import analytics.api.types.{ FleetName, LocationName, SpecieName }
 import zio.UIO
-import zio.stream.Stream
+import zquery.ZQuery
 
 object types {
 
@@ -24,8 +24,8 @@ object types {
   )
 
   case class Node(
-    landings: Stream[Nothing, Landing],
-    summary: UIO[LandingsSummary],
+    landings: ZQuery[Any, Nothing, List[Landing]],
+    summary: ZQuery[Any, Nothing, LandingsSummary],
     byDate: UIO[Map[YearMonth, Node]],
     byLocation: UIO[Map[LocationName, Node]],
     bySpecie: UIO[Map[SpecieName, Node]],

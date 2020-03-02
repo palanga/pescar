@@ -28,8 +28,8 @@ object resolver {
 
   private def fromFilter(filter: Filter): Node =
     Node(
-      landings = landingsFromFilter(filter),
-      summary = landingsSummaryFromFilter(filter).map(LandingsSummary),
+      landings = query.landingsFromFilter(filter),
+      summary = query.landingsSummaryFromFilter(filter).map(LandingsSummary),
       byDate = UIO effectTotal byKey(filter, _.dates, _ withDates _),
       byLocation = UIO effectTotal byKey(filter, _.locations, _ withLocations _),
       bySpecie = UIO effectTotal byKey(filter, _.species, _ withSpecies _),

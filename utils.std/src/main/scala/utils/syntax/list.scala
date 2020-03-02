@@ -18,40 +18,34 @@ object list {
      * component as the key for the outer Map and the second component as the
      * key for the inner Maps.
      */
-    def toMultiMap: Map[A, Map[B, C]] =
+    def toBiMap: Map[A, Map[B, C]] =
       self
         .groupMap(_._1)(tuple => (tuple._2, tuple._3))
-        .view
-        .mapValues(_.toMap)
-        .toMap
+        .map(kv => kv._1 -> kv._2.toMap)
 
   }
 
   implicit class TetradListOps[A, B, C, D](val self: List[(A, B, C, D)]) extends AnyVal {
 
     /**
-     * Similar to [[TriadListOps.toMultiMap]] but one step further.
+     * Similar to [[TriadListOps.toBiMap]] but one step further.
      */
-    def toMultiMap: Map[A, Map[B, Map[C, D]]] =
+    def toTriMap: Map[A, Map[B, Map[C, D]]] =
       self
         .groupMap(_._1)(tuple => (tuple._2, tuple._3, tuple._4))
-        .view
-        .mapValues(_.toMultiMap)
-        .toMap
+        .map(kv => kv._1 -> kv._2.toBiMap)
 
   }
 
   implicit class QuintetListOps[A, B, C, D, E](val self: List[(A, B, C, D, E)]) extends AnyVal {
 
     /**
-     * Similar to [[TetradListOps.toMultiMap]] but one step further.
+     * Similar to [[TetradListOps.toTriMap]] but one step further.
      */
-    def toMultiMap: Map[A, Map[B, Map[C, Map[D, E]]]] =
+    def toTetraMap: Map[A, Map[B, Map[C, Map[D, E]]]] =
       self
         .groupMap(_._1)(tuple => (tuple._2, tuple._3, tuple._4, tuple._5))
-        .view
-        .mapValues(_.toMultiMap)
-        .toMap
+        .map(kv => kv._1 -> kv._2.toTriMap)
 
   }
 
