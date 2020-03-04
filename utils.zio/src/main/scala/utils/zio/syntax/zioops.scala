@@ -4,7 +4,7 @@ object zioops {
 
   import zio.ZIO
   import zio.clock.Clock
-  import zio.console.{ Console, putStrLn }
+  import zio.console.{ putStrLn, Console }
   import zio.stream.ZStream
 
   implicit final class ZStreamOps[-R, +E, +A](private val self: ZStream[R, E, A]) extends AnyVal {
@@ -14,6 +14,8 @@ object zioops {
      */
     def mapMPar_[R1 <: R, E1 >: E, B](n: Int, f: A => ZIO[R1, E1, B]): ZStream[R1, E1, B] =
       self.mapMPar[R1, E1, B](n)(f)
+
+    def tapPrint(show: A => String): ZStream[Console with R, E, A] = self.tap(putStrLn _ compose show)
 
   }
 
