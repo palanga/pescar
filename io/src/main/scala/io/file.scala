@@ -4,7 +4,7 @@ import java.io.IOException
 
 import zio.ZIO
 import zio.nio.channels.AsynchronousFileChannel
-import zio.nio.file.Path
+import zio.nio.core.file.Path
 import zio.stream.{ Sink, Stream }
 
 object file {
@@ -51,7 +51,7 @@ object file {
       decoded <- Stream(wholeFile) // Create a stream just to use Sink.utf8DecodeChunk and Sink.splitLines
                   .aggregate(Sink.utf8DecodeChunk)
                   .aggregate(Sink.splitLines)
-                  .flatMap(Stream.fromChunk)
+                  .flatMap(Stream fromChunk _)
                   .runCollect
     } yield decoded
 
@@ -64,6 +64,6 @@ object file {
       .takeUntil(_.isEmpty)
       .aggregate(Sink.utf8DecodeChunk)
       .aggregate(Sink.splitLines)
-      .flatMap(Stream.fromChunk)
+      .flatMap(Stream fromChunk _)
 
 }

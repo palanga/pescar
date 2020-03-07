@@ -2,9 +2,12 @@ package analytics.api.graphql.landings
 
 import java.time.YearMonth
 
+import analytics.api.Main.AppEnv
 import analytics.api.types.Metric.{ Landing, LandingsSummary }
 import analytics.api.types.{ FleetName, LocationName, SpecieName }
+import analytics.consumer.gob.datos.database.landing.module.LandingsDatabase
 import zio.UIO
+import zio.blocking.Blocking
 import zquery.ZQuery
 
 object types {
@@ -24,8 +27,8 @@ object types {
   )
 
   case class Node(
-    landings: ZQuery[Any, Nothing, List[Landing]],
-    summary: ZQuery[Any, Nothing, LandingsSummary],
+    landings: ZQuery[AppEnv, Nothing, List[Landing]],
+    summary: ZQuery[AppEnv, Nothing, LandingsSummary],
     byDate: UIO[Map[YearMonth, Node]],
     byLocation: UIO[Map[LocationName, Node]],
     bySpecie: UIO[Map[SpecieName, Node]],

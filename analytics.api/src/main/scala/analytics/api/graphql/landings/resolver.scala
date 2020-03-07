@@ -2,8 +2,7 @@ package analytics.api.graphql.landings
 
 import java.time.YearMonth
 
-import analytics.api.database.landings.Dummy._
-import analytics.api.database.landings.landings_tables.{ FLEETS_ALL, LOCATIONS_ALL, SPECIES_ALL }
+import analytics.api.database.landings.TestData.{ FLEETS_ALL, LOCATIONS_ALL, SPECIES_ALL }
 import analytics.api.graphql.landings.types.{ Args, Node }
 import analytics.api.types.Metric.LandingsSummary
 import analytics.api.types.{ Filter, FleetName, LocationName, SpecieName }

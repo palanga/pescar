@@ -1,14 +1,12 @@
 package analytics.consumer.gob.datos
 
 import analytics.consumer.gob.datos.csv.parser.LineParseError
-import analytics.consumer.gob.datos.database.landing.{ DoobieLandingsDatabase, LandingsDatabase }
-import analytics.consumer.gob.datos.http.client.HttpClient
+import analytics.consumer.gob.datos.database.landing.{ module => db }
 import analytics.consumer.gob.datos.http.client.types.Request
-import zio.blocking.Blocking
-import zio.clock.Clock
-import zio.console.Console
+import analytics.consumer.gob.datos.http.client.{ module => httpClient }
+import config.Config
 import zio.stream.ZStream
-import zio.{ App, ZEnv, ZIO, ZManaged }
+import zio.{ App, ZEnv, ZIO }
 
 object Main extends App {
 
@@ -19,16 +17,18 @@ object Main extends App {
 
     import utils.zio.syntax.zioops._
 
-    (loadDataFromCsv zipPar loadDataFromApi)
+    (loadDataFromCsv zipPar loadDataFromApi())
       .map { case (csvData, apiData) => csvData ++ apiData }
-      .flatMap(LandingsDatabase.module.saveMany)
+      .flatMap(db.saveMany)
       .tapPrint(saved => s"Saved ${saved.size} landings")
       .tapPrintTimed("Total time: ")
       .as(ExitStatus.Success)
-      .provideSomeManaged(dependencies)
+      .provideSomeLayer[ZEnv](dependencies)
       .orDie
 
   }
+
+  val dependencies = db.doobie(Config.test.db) ++ httpClient.sttp
 
   /**
    * Read the whole file, parse it and collect to a either a list of success or a list of parse failures.
@@ -66,7 +66,7 @@ object Main extends App {
       extends Exception("On lines:\n" ++ errors.mkString("\n"))
 
   /**
-   * Fetch withInterpreter the data and collect to a list.
+   * Fetch the data and collect to a list.
    *
    * The motivation behind this is because if we save the data as it's coming we would have the risk of, at the
    * presence of some error, stop saving the subsequent data and therefore leaving the database in a partial and
@@ -74,21 +74,20 @@ object Main extends App {
    *
    * Consider using a pure stream solution if the size of the data is too big.
    */
-  private val loadDataFromApi = {
+  def loadDataFromApi(initialOffset: Int = 0, pageSize: Int = 100) =
+    streamDataFromApi(initialOffset, pageSize).runCollect
+      .map(_.flatten)
+
+  def streamDataFromApi(initialOffset: Int = 0, pageSize: Int = 100) = {
 
     import utils.zio.syntax.zioops._
 
-    val INITIAL_OFFSET = 0
-    val PAGE_SIZE      = 100
-
     ZStream
-      .iterate(INITIAL_OFFSET)(_ + PAGE_SIZE)
-      .map(makeRequest(constants.ResourceId.DESEMBARQUE_DE_CAPTURA_DE_ESPECIES_MARÍTIMAS_2019)(PAGE_SIZE))
-      .mapMPar_(4, HttpClient.module.fetch)
+      .iterate(initialOffset)(_ + pageSize)
+      .map(makeRequest(constants.ResourceId.DESEMBARQUE_DE_CAPTURA_DE_ESPECIES_MARÍTIMAS_2019)(pageSize))
+      .mapMPar_(4, httpClient.fetch)
       .map(_.result.records)
       .takeWhile(_.nonEmpty)
-      .runCollect
-      .map(_.flatten)
 
   }
 
@@ -101,22 +100,5 @@ object Main extends App {
   object ExitStatus {
     val Success = 0
   }
-
-  // TODO will go away in ZIO 1.0.0-RC18
-  private val dependencies =
-    for {
-      env    <- ZManaged.environment[Blocking with Clock with Console]
-      config <- config.ConfigLoader.loadYamlConfig.toManaged_
-      doobie <- DoobieLandingsDatabase.makeManaged(config.db)
-      sttp   <- http.client.SttpClient.makeManaged
-    } yield {
-      new Blocking with Clock with Console with LandingsDatabase with HttpClient {
-        override val blocking         = env.blocking
-        override val clock            = env.clock
-        override val console          = env.console
-        override val landingsDatabase = doobie.landingsDatabase
-        override val httpClient       = sttp.httpClient
-      }
-    }
 
 }

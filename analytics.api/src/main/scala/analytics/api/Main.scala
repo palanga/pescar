@@ -1,33 +1,38 @@
 package analytics.api
 
+import analytics.api.database.landings.module.LandingsDatabase
+import analytics.api.database.landings.{ module => db }
 import analytics.api.graphql.landings.schema
 import analytics.api.http.routes
 import org.http4s.server.blaze.BlazeServerBuilder
-import zio.clock.Clock
-import zio.interop.catz._
-import zio.{ App, RIO, ZEnv, ZIO }
+import zio.console.putStrLn
+import zio.interop.catz.CatsApp
+import zio.{ RIO, ZEnv, ZIO }
 
-object Main extends App {
+object Main extends CatsApp {
 
-  trait BaseEnv extends Clock
-
-  type AppEnv     = Clock
-  type AppTask[A] = RIO[AppEnv, A]
+  type AppEnv   = ZEnv with LandingsDatabase
+  type ZTask[A] = RIO[ZEnv, A]
 
   override def run(args: List[String]): ZIO[ZEnv, Nothing, Int] =
-    zio.console.putStrLn(api.render) *> makeServer.orDie map (_ => 0)
+    putStrLn(api.render) *> startServer.orDie as 0
 
   val api     = schema.make
-  val httpApp = routes withInterpreter api.interpreter
+  val httpApp =
+    api.interpreter
+      .map(_.provideSomeLayer[ZEnv](db.test))
+      .map(routes.withInterpreter)
 
-  private val makeServer: ZIO[AppEnv, Throwable, Unit] =
-    ZIO.runtime[AppEnv] >>= { implicit env =>
-      BlazeServerBuilder[AppTask]
+  private val startServer = {
+    import zio.interop.catz.{ taskEffectInstance, zioTimer }
+    httpApp.flatMap { httpApp =>
+      BlazeServerBuilder[ZTask]
         .bindHttp(8080, "localhost")
         .withHttpApp(httpApp)
         .serve
         .compile
         .drain
     }
+  }
 
 }

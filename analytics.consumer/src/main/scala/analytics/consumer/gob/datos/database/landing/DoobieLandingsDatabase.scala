@@ -2,107 +2,78 @@ package analytics.consumer.gob.datos.database.landing
 
 import java.time.{ LocalDate, YearMonth }
 
-import analytics.consumer.gob.datos.database.landing.types.BlockingIO
+import analytics.consumer.gob.datos.database.landing.module.{ BlockingIO, LandingsDatabase }
 import analytics.consumer.gob.datos.types.Landing
+import cats.effect.Blocker
+import config.DBConfig
+import doobie.hikari.HikariTransactor
 import doobie.util.transactor.Transactor
 import doobie.util.update.Update
 import doobie.util.{ Get, Put }
 import zio.blocking.Blocking
 import zio.stream.ZStream
+import zio.{ ZIO, ZLayer }
 
-trait DoobieLandingsDatabase extends LandingsDatabase {
+object DoobieLandingsDatabase {
 
-  protected val transactor: Transactor[BlockingIO]
+  import zio.interop.catz._
 
-  override val landingsDatabase = new LandingsDatabase.Service[Blocking] {
+  // TODO make config a dependency
+  def make(config: DBConfig): ZLayer[Blocking, Throwable, LandingsDatabase] =
+    ZIO
+      .runtime[Blocking]
+      .toManaged_
+      .flatMap { implicit runtime =>
+        HikariTransactor
+          .newHikariTransactor[BlockingIO](
+            config.driverName,
+            config.url,
+            config.username,
+            config.password,
+            runtime.platform.executor.asEC,
+            Blocker.liftExecutionContext(runtime.environment.get.blockingExecutor.asEC)
+          )
+          .toManaged
+      }
+      .map(new DoobieLandingsDatabase(_))
+      .toLayer
 
-    override def save(landing: Landing) = ???
+}
 
-    override def saveMany(landings: Iterable[Landing]) = {
+private final class DoobieLandingsDatabase(transactor: Transactor[BlockingIO]) extends module.LandingsDatabase.Service {
 
-      import cats.instances.list.catsStdInstancesForList
-      import doobie.syntax.connectionio.toConnectionIOOps
-      import instances.yearMonthPut
-      import zio.interop.catz.taskConcurrentInstance
+  // TODO
+  override def save(landing: Landing) = ???
 
-      Update[Landing](sql.insertMany)
-        .updateMany(landings.toList)
-        .transact(transactor)
-        .as(landings)
+  override def saveMany(landings: Iterable[Landing]) = {
 
-    }
+    import cats.instances.list.catsStdInstancesForList
+    import doobie.syntax.connectionio.toConnectionIOOps
+    import instances.yearMonthPut
+    import zio.interop.catz.taskConcurrentInstance
 
-    override def find(dates: Set[YearMonth]) = {
+    Update[Landing](sql.insertMany)
+      .updateMany(landings.toList)
+      .transact(transactor)
+      .as(landings)
 
-      import doobie.syntax.connectionio.toConnectionIOOps
-      import instances.{ yearMonthGet, yearMonthPut }
-      import zio.interop.catz.taskConcurrentInstance
+  }
 
-      def zioRes = sql.findByDate(dates.toList).query[Landing].stream.compile.toList.transact(transactor)
+  override def find(dates: Set[YearMonth]) = {
 
-      if (dates.isEmpty) ZStream.empty else ZStream.fromEffect(zioRes).flatMap(ZStream.fromIterable)
+    import doobie.syntax.connectionio.toConnectionIOOps
+    import instances.yearMonthGet
+    import zio.interop.catz.taskConcurrentInstance
 
-    }
+    def zioRes = sql.findByDate(dates.toList).query[Landing].stream.compile.toList.transact(transactor)
+
+    if (dates.isEmpty) ZStream.empty else ZStream.fromEffect(zioRes).flatMap(ZStream fromIterable _)
 
   }
 
 }
 
-object DoobieLandingsDatabase {
-
-  import cats.effect.Blocker
-  import config.DBConfig
-  import doobie.hikari.HikariTransactor
-  import zio.ZIO
-  import zio.blocking.Blocking
-  import zio.interop.catz._
-
-  def makeManaged(config: DBConfig) =
-    ZIO.runtime[Blocking].toManaged_ flatMap { implicit runtime =>
-      for {
-        blockingExecutor <- runtime.environment.blocking.blockingExecutor.toManaged_
-        hikariTransactor <- HikariTransactor
-                             .newHikariTransactor[BlockingIO](
-                               config.driverName,
-                               config.url,
-                               config.username,
-                               config.password,
-                               runtime.platform.executor.asEC,
-                               Blocker.liftExecutionContext(blockingExecutor.asEC)
-                             )
-          .toManaged
-      } yield {
-        new DoobieLandingsDatabase {
-          override protected val transactor: Transactor[BlockingIO] = hikariTransactor
-        }
-      }
-    }
-
-  def makeManagedWithBlocking =
-    ZIO.runtime[Blocking].toManaged_ flatMap { implicit runtime =>
-      for {
-        blockingExecutor <- runtime.environment.blocking.blockingExecutor.toManaged_
-        hikariTransactor <- HikariTransactor
-          .newHikariTransactor[BlockingIO](
-            "org.postgresql.Driver",
-            "jdbc:postgresql://postgres:5432/datos_gob",
-            "palan",
-            "",
-            runtime.platform.executor.asEC,
-            Blocker.liftExecutionContext(blockingExecutor.asEC)
-          )
-          .toManaged
-      } yield {
-        new DoobieLandingsDatabase with Blocking {
-          override           val blocking  : Blocking.Service[Any]  = runtime.environment.blocking
-          override protected val transactor: Transactor[BlockingIO] = hikariTransactor
-        }
-      }
-    }
-
-}
-
-object sql {
+private object sql {
 
   import doobie.implicits._
 
@@ -116,7 +87,7 @@ object sql {
 
 }
 
-object instances {
+private object instances {
   implicit val yearMonthPut: Put[YearMonth] = Put[LocalDate].contramap(_ atDay 1)
   implicit val yearMonthGet: Get[YearMonth] = Get[LocalDate].map(YearMonth.from)
 }

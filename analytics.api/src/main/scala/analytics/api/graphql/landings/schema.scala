@@ -9,8 +9,9 @@ import analytics.api.types.Metric.LandingsSummary
 import analytics.api.types.{ Fleet, Location, Specie }
 import caliban.GraphQL.graphQL
 import caliban.schema.{ ArgBuilder, GenericSchema, Schema }
-import caliban.{ CalibanError, RootResolver }
+import caliban.{ CalibanError, GraphQL, RootResolver }
 import utils.GeoDegree.{ Latitude, Longitude }
+import zio.blocking.Blocking
 
 object schema extends GenericSchema[AppEnv] {
 
@@ -33,7 +34,7 @@ object schema extends GenericSchema[AppEnv] {
   private implicit val SpecieSchema: Schema.Typeclass[Specie]     = Schema.stringSchema.contramap(_.name)
   private implicit val fleetSchema: Schema.Typeclass[Fleet]       = Schema.stringSchema.contramap(_.name)
 
-  val make =
+  val make: GraphQL[AppEnv] =
     graphQL(
       RootResolver(
         Queries(

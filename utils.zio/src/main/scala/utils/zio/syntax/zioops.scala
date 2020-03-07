@@ -15,13 +15,13 @@ object zioops {
     def mapMPar_[R1 <: R, E1 >: E, B](n: Int, f: A => ZIO[R1, E1, B]): ZStream[R1, E1, B] =
       self.mapMPar[R1, E1, B](n)(f)
 
-    def tapPrint(show: A => String): ZStream[Console with R, E, A] = self.tap(putStrLn _ compose show)
+    def tapPrint(show: A => String): ZStream[Console with R, E, A] = self.tap(a => putStrLn(show(a)))
 
   }
 
   implicit final class ZIOOps[-R, +E, +A](private val self: ZIO[R, E, A]) extends AnyVal {
 
-    def tapPrint(show: A => String): ZIO[Console with R, E, A] = self.tap(putStrLn _ compose show)
+    def tapPrint(show: A => String): ZIO[Console with R, E, A] = self.tap(a => putStrLn(show(a)))
 
     def tapPrintTimed(prefix: String = "Elapsed time: "): ZIO[Console with R with Clock, E, A] =
       self.timed.tap(timed => putStrLn(prefix ++ timed._1.render)).map(_._2)

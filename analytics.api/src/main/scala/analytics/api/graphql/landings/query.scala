@@ -2,31 +2,34 @@ package analytics.api.graphql.landings
 
 import java.time.YearMonth
 
-import analytics.api.database.landings.Dummy
+import analytics.api.Main.AppEnv
+import analytics.api.database.landings.{ module => db }
 import analytics.api.types.Filter
 import analytics.api.types.Metric.Landing
+import zio.ZIO
 import zquery.{ CompletedRequestMap, DataSource, Request, ZQuery }
 
-case class LandingsFromFilter(filter: Filter) extends Request[Nothing, List[Landing]]
+case class LandingsFromFilterRequest(filter: Filter) extends Request[Nothing, List[Landing]]
 
 object query {
 
-  def landingsFromFilter(filter: Filter) = ZQuery.fromRequest(LandingsFromFilter(filter))(LandingsDataSource)
+  def landingsFromFilter(filter: Filter) = ZQuery.fromRequest(LandingsFromFilterRequest(filter))(LandingsDataSource)
 
   def landingsSummaryFromFilter(filter: Filter) = landingsFromFilter(filter).map(_.map(_.catchCount).sum)
 
-  private val LandingsDataSource: DataSource[Any, LandingsFromFilter] =
+  private val LandingsDataSource: DataSource[AppEnv, LandingsFromFilterRequest] =
     DataSource("LandingDataSource") { requests =>
-      Dummy
+      db
         .landingsFromFilter(requests.map(_.filter).reduce(_ union _))
         .runCollect
         .map(makeResultMap(requests))
+        .catchAll(makeErrorMap(requests)) // TODO
     }
 
   /**
    * O(n * log n)
    */
-  private def makeResultMap(requests: Iterable[LandingsFromFilter])(landings: List[Landing]) = {
+  private def makeResultMap(requests: Iterable[LandingsFromFilterRequest])(landings: List[Landing]) = {
 
     import utils.syntax.list.QuintetListOps
 
@@ -83,6 +86,9 @@ object query {
     )
 
   }
+
+  private def makeErrorMap(requests: Iterable[LandingsFromFilterRequest])(t: Throwable) =
+    ZIO succeed requests.foldLeft(CompletedRequestMap.empty)(_.insert(_)(Left(t)))
 
   // TODO move
   private implicit class FilterOps(val self: Filter) extends AnyVal {
