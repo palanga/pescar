@@ -1,5 +1,10 @@
 {
-  landings(dates: ["2017-07"], locations: ["Puerto Madryn"], species: ["Langostino", "Pulpo"], fleets: ["Rada o Ría", "Fresqueros"]) {
+  landings(
+    dateRange: { from: "2017-07", until: "2017-08" },
+    locations: ["Puerto Madryn"],
+    species: ["Langostino", "Merluza hubbsi"],
+    fleets: ["Rada o ría", "Fresqueros"],
+  ) {
     summary
     landings {
       date

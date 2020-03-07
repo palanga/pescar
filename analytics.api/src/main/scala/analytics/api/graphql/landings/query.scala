@@ -51,10 +51,34 @@ object query {
           .flatMap(_.get(specie))
           .flatMap(_.get(fleet))
 
+    // TODO move and make better
+    def landingComparator(a: Landing, b: Landing): Boolean = {
+
+      def compareNoDateNoLocationNoSpecie: Boolean =
+        if (a.fleet.name.compareTo(b.fleet.name) > 0) false
+        else if (a.fleet.name.compareTo(b.fleet.name) < 0) true
+        else true
+
+      def compareNoDateNoLocation: Boolean =
+        if (a.specie.name.compareTo(b.specie.name) > 0) false
+        else if (a.specie.name.compareTo(b.specie.name) < 0) true
+        else compareNoDateNoLocationNoSpecie
+
+      def compareNoDate: Boolean =
+        if (a.location.name.compareTo(b.location.name) > 0) false
+        else if (a.location.name.compareTo(b.location.name) < 0) true
+        else compareNoDateNoLocation
+
+      if (a.date isAfter b.date) false
+      else if (a.date isBefore b.date) true
+      else compareNoDate
+
+    }
+
     requests.foldLeft(CompletedRequestMap.empty)(
       (resultMap, req) => {
         val result = findResult(req.filter) collect { case Some(landing) => landing }
-        resultMap.insert(req)(Right(result.toList))
+        resultMap.insert(req)(Right(result.toList sortWith landingComparator))
       }
     )
 

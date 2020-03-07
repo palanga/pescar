@@ -1,6 +1,7 @@
 package analytics.api
 
-import io.file
+import analytics.api.Main.api
+import io.file.open
 import zio.system.System
 import zio.test.Assertion.equalTo
 import zio.test.{ assert, suite, testM, DefaultRunnableSpec }
@@ -29,18 +30,21 @@ object TestMain
 
 object aux {
 
-  import io.circe.parser.parse
+  import io.circe.parser.{ parse => circeParse }
   import io.circe.syntax._
 
-  // TODO diffson
+  // TODO convert to string in order to benefit from string diffing in next ZIO release
   def runTestCase(name: String) =
     for {
       userDir                 <- system.property("user.dir").someOrFailException.provide(System.Live)
       path                    = userDir ++ "/src/test/scala/analytics/api/cases"
+      pathFromIntelliJ        = userDir ++ "/analytics.api/src/test/scala/analytics/api/cases"
       fileName                = name replace (' ', '_')
-      loadAndExecuteQuery     = file.open(s"$path/$fileName.graphql") flatMap (Main.api.interpreter.execute(_))
-      loadAndParseExpected    = file.open(s"$path/$fileName.json") flatMap (ZIO fromEither parse(_))
-      (gqlResponse, expected) <- loadAndExecuteQuery zipPar loadAndParseExpected
+      query                   = open(s"$path/$fileName.graphql") race open(s"$pathFromIntelliJ/$fileName.graphql")
+      expected                = open(s"$path/$fileName.json") race open(s"$pathFromIntelliJ/$fileName.json")
+      (gqlResponse, expected) <- (query >>= (api.interpreter.execute(_))) zipPar (expected >>= parse)
     } yield assert(gqlResponse.asJson, equalTo(expected))
+
+  private def parse(str: String) = ZIO fromEither circeParse(str)
 
 }

@@ -318,7 +318,7 @@ object landings_tables {
   private val Langostino    = Specie("Langostino")
   private val MerluzaHubbsi = Specie("Merluza hubbsi")
 
-  private val RadaORia   = Fleet("Rada o Ría")
+  private val RadaORia   = Fleet("Rada o ría")
   private val Fresqueros = Fleet("Fresqueros")
 
   private val all = List(

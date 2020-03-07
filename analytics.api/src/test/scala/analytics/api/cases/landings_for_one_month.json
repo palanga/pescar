@@ -6,27 +6,27 @@
           "date": "2017-07",
           "location": "Mar del Plata",
           "specie": "Langostino",
-          "fleet": "Rada o Ría",
+          "fleet": "Rada o ría",
           "catchCount": 2
         },
         {
           "date": "2017-07",
           "location": "Mar del Plata",
-          "specie": "Pulpo",
-          "fleet": "Rada o Ría",
+          "specie": "Merluza hubbsi",
+          "fleet": "Rada o ría",
           "catchCount": 3
         },
         {
           "date": "2017-07",
           "location": "Puerto Madryn",
           "specie": "Langostino",
-          "fleet": "Rada o Ría",
+          "fleet": "Rada o ría",
           "catchCount": 1
         },
         {
           "date": "2017-07",
           "location": "Puerto Madryn",
-          "specie": "Pulpo",
+          "specie": "Merluza hubbsi",
           "fleet": "Fresqueros",
           "catchCount": 1
         }

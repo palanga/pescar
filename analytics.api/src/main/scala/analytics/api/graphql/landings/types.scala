@@ -17,7 +17,7 @@ object types {
   )
 
   case class Args(
-    dates: List[YearMonth],
+    dateRange: DateRange,
     locations: Option[List[LocationName]],
     species: Option[List[SpecieName]],
     fleets: Option[List[FleetName]],
@@ -31,5 +31,40 @@ object types {
     bySpecie: UIO[Map[SpecieName, Node]],
     byFleet: UIO[Map[FleetName, Node]],
   )
+
+  /**
+   * @param from  inclusive
+   * @param until exclusive
+   */
+  case class DateRange(from: YearMonth, until: YearMonth) {
+    def toSet: Set[YearMonth] = {
+
+      val fromYear   = from.getYear
+      val fromMonth  = from.getMonthValue
+      val untilYear  = until.getYear
+      val untilMonth = until.getMonthValue
+
+      def firstYearTruncated = (fromMonth to 12).map(month => YearMonth.of(fromYear, month))
+
+      def lastYearTruncated = (1 until untilMonth).map(month => YearMonth.of(untilYear, month))
+
+      def yearsBetween =
+        for {
+          year  <- (fromYear + 1) until untilYear
+          month <- 1 to 12
+        } yield YearMonth.of(year, month)
+
+      if (from == until || from.isAfter(until)) {
+        Set.empty
+      } else if (fromYear == untilYear) {
+        (fromMonth until untilMonth).map(month => YearMonth.of(fromYear, month)).toSet
+      } else if (fromYear + 1 == untilYear) {
+        firstYearTruncated.toSet ++ lastYearTruncated.toSet
+      } else {
+        firstYearTruncated.toSet ++ yearsBetween.toSet ++ lastYearTruncated.toSet
+      }
+
+    }
+  }
 
 }

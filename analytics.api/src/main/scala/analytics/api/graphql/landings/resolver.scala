@@ -19,7 +19,7 @@ object resolver {
   def fromArgs(args: Args) =
     fromFilter(
       Filter(
-        args.dates.toSet,
+        args.dateRange.toSet,
         args.locations.map(_.toSet) getOrElse LOCATIONS_ALL.map(_.name),
         args.species.map(_.toSet) getOrElse SPECIES_ALL.map(_.name),
         args.fleets.map(_.toSet) getOrElse FLEETS_ALL.map(_.name),

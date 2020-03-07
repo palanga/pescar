@@ -25,10 +25,18 @@ type Node {
   byFleet: [KVStringNode!]!
   byLocation: [KVStringNode!]!
   bySpecie: [KVStringNode!]!
-  landings: Landing!
+  landings: [Landing!]!
   summary: Int!
 }
 
 type Queries {
-  landings(dates: [String!]!, fleets: [String!], locations: [String!], species: [String!]): Node!
+  fleets: [String!]!
+  landings(dateRange: DateRangeInput!, fleets: [String!], locations: [String!], species: [String!]): Node!
+  locations: [String!]!
+  species: [String!]!
+}
+
+input DateRangeInput {
+  from: String!
+  until: String!
 }

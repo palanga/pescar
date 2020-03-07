@@ -18,21 +18,21 @@
                             "date": "2017-07",
                             "location": "Mar del Plata",
                             "specie": "Langostino",
-                            "fleet": "Rada o Ría",
+                            "fleet": "Rada o ría",
                             "catchCount": 2
                           }
                         ]
                       }
                     },
                     {
-                      "key": "Pulpo",
+                      "key": "Merluza hubbsi",
                       "value": {
                         "landings": [
                           {
                             "date": "2017-07",
                             "location": "Mar del Plata",
-                            "specie": "Pulpo",
-                            "fleet": "Rada o Ría",
+                            "specie": "Merluza hubbsi",
+                            "fleet": "Rada o ría",
                             "catchCount": 3
                           }
                         ]
@@ -53,20 +53,20 @@
                             "date": "2017-07",
                             "location": "Puerto Madryn",
                             "specie": "Langostino",
-                            "fleet": "Rada o Ría",
+                            "fleet": "Rada o ría",
                             "catchCount": 1
                           }
                         ]
                       }
                     },
                     {
-                      "key": "Pulpo",
+                      "key": "Merluza hubbsi",
                       "value": {
                         "landings": [
                           {
                             "date": "2017-07",
                             "location": "Puerto Madryn",
-                            "specie": "Pulpo",
+                            "specie": "Merluza hubbsi",
                             "fleet": "Fresqueros",
                             "catchCount": 1
                           }
@@ -95,21 +95,21 @@
                             "date": "2017-08",
                             "location": "Mar del Plata",
                             "specie": "Langostino",
-                            "fleet": "Rada o Ría",
+                            "fleet": "Rada o ría",
                             "catchCount": 10
                           }
                         ]
                       }
                     },
                     {
-                      "key": "Pulpo",
+                      "key": "Merluza hubbsi",
                       "value": {
                         "landings": [
                           {
                             "date": "2017-08",
                             "location": "Mar del Plata",
-                            "specie": "Pulpo",
-                            "fleet": "Rada o Ría",
+                            "specie": "Merluza hubbsi",
+                            "fleet": "Rada o ría",
                             "catchCount": 7
                           }
                         ]
@@ -130,20 +130,20 @@
                             "date": "2017-08",
                             "location": "Puerto Madryn",
                             "specie": "Langostino",
-                            "fleet": "Rada o Ría",
+                            "fleet": "Rada o ría",
                             "catchCount": 9
                           }
                         ]
                       }
                     },
                     {
-                      "key": "Pulpo",
+                      "key": "Merluza hubbsi",
                       "value": {
                         "landings": [
                           {
                             "date": "2017-08",
                             "location": "Puerto Madryn",
-                            "specie": "Pulpo",
+                            "specie": "Merluza hubbsi",
                             "fleet": "Fresqueros",
                             "catchCount": 4
                           }
@@ -171,7 +171,7 @@
                       }
                     },
                     {
-                      "key": "Pulpo",
+                      "key": "Merluza hubbsi",
                       "value": {
                         "landings": []
                       }
@@ -190,7 +190,7 @@
                       }
                     },
                     {
-                      "key": "Pulpo",
+                      "key": "Merluza hubbsi",
                       "value": {
                         "landings": []
                       }

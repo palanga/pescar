@@ -7,13 +7,13 @@
           "date": "2017-07",
           "location": "Puerto Madryn",
           "specie": "Langostino",
-          "fleet": "Rada o Ría",
+          "fleet": "Rada o ría",
           "catchCount": 1
         },
         {
           "date": "2017-07",
           "location": "Puerto Madryn",
-          "specie": "Pulpo",
+          "specie": "Merluza hubbsi",
           "fleet": "Fresqueros",
           "catchCount": 1
         }
@@ -28,13 +28,13 @@
                 "date": "2017-07",
                 "location": "Puerto Madryn",
                 "specie": "Langostino",
-                "fleet": "Rada o Ría",
+                "fleet": "Rada o ría",
                 "catchCount": 1
               },
               {
                 "date": "2017-07",
                 "location": "Puerto Madryn",
-                "specie": "Pulpo",
+                "specie": "Merluza hubbsi",
                 "fleet": "Fresqueros",
                 "catchCount": 1
               }
@@ -49,13 +49,13 @@
                       "date": "2017-07",
                       "location": "Puerto Madryn",
                       "specie": "Langostino",
-                      "fleet": "Rada o Ría",
+                      "fleet": "Rada o ría",
                       "catchCount": 1
                     },
                     {
                       "date": "2017-07",
                       "location": "Puerto Madryn",
-                      "specie": "Pulpo",
+                      "specie": "Merluza hubbsi",
                       "fleet": "Fresqueros",
                       "catchCount": 1
                     }
@@ -70,7 +70,7 @@
                             "date": "2017-07",
                             "location": "Puerto Madryn",
                             "specie": "Langostino",
-                            "fleet": "Rada o Ría",
+                            "fleet": "Rada o ría",
                             "catchCount": 1
                           }
                         ],
@@ -83,7 +83,7 @@
                             }
                           },
                           {
-                            "key": "Rada o Ría",
+                            "key": "Rada o ría",
                             "value": {
                               "summary": 1,
                               "landings": [
@@ -91,7 +91,7 @@
                                   "date": "2017-07",
                                   "location": "Puerto Madryn",
                                   "specie": "Langostino",
-                                  "fleet": "Rada o Ría",
+                                  "fleet": "Rada o ría",
                                   "catchCount": 1
                                 }
                               ]
@@ -101,14 +101,14 @@
                       }
                     },
                     {
-                      "key": "Pulpo",
+                      "key": "Merluza hubbsi",
                       "value": {
                         "summary": 1,
                         "landings": [
                           {
                             "date": "2017-07",
                             "location": "Puerto Madryn",
-                            "specie": "Pulpo",
+                            "specie": "Merluza hubbsi",
                             "fleet": "Fresqueros",
                             "catchCount": 1
                           }
@@ -122,7 +122,7 @@
                                 {
                                   "date": "2017-07",
                                   "location": "Puerto Madryn",
-                                  "specie": "Pulpo",
+                                  "specie": "Merluza hubbsi",
                                   "fleet": "Fresqueros",
                                   "catchCount": 1
                                 }
@@ -130,7 +130,7 @@
                             }
                           },
                           {
-                            "key": "Rada o Ría",
+                            "key": "Rada o ría",
                             "value": {
                               "summary": 0,
                               "landings": []

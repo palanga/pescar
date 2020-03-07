@@ -1,5 +1,10 @@
 {
-  landings(dates: ["2017-07", "2017-08", "2017-09"]) {
+  landings(
+    dateRange: { from: "2017-07", until: "2017-10" },
+    locations: ["Puerto Madryn", "Mar del Plata"],
+    species: ["Merluza hubbsi", "Langostino"],
+    fleets: ["Rada o ría", "Fresqueros"],
+  ) {
     byDate {
       key
       value {

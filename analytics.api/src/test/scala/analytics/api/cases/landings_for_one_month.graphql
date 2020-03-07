@@ -1,5 +1,5 @@
 {
-  landings(dates: ["2017-07"]) {
+  landings(dateRange: { from: "2017-07", until: "2017-08" }) {
     landings {
       date
       location
