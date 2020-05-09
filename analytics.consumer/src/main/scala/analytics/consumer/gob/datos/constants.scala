@@ -13,6 +13,8 @@ object constants {
      */
     val CAPTURA_PUERTO_FLOTA_2010_2018 = "/Users/palan/Downloads/captura-puerto-flota-2010-2018-utf8.csv"
 
+    val CAPTURA_PUERTO_FLOTA_2019 = "/Users/palan/Downloads/captura-puerto-flota-2019-utf8.csv"
+
     /**
      * The same as [[CAPTURA_PUERTO_FLOTA_2010_2018]] but with errors in some columns. Used for testing.
      */
