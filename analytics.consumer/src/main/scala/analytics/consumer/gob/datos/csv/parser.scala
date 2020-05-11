@@ -1,6 +1,7 @@
 package analytics.consumer.gob.datos.csv
 
 import analytics.consumer.gob.datos.types.Landing
+import time.AsYearMonth
 
 object parser {
 
@@ -61,11 +62,6 @@ object parser {
 
   object AsInt {
     def unapply(arg: String): Option[Int] = arg.toIntOption
-  }
-
-  object AsYearMonth {
-    import time.syntax.StringOps
-    def unapply(arg: String) = arg.toYearMonthOption
   }
 
   case class LineParseError(message: String) extends AnyVal {
