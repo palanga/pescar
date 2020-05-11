@@ -33,12 +33,13 @@ private final class SttpClient(implicit sttpBackend: SttpBackend[Task, Nothing, 
     import sttp.client.circe._
     import sttp.client.{ DeserializationError => SttpDeserializationError, _ }
 
-    def handleError(response: Response[_])(error: ResponseError[_]) = error match {
-      case HttpError(body) =>
-        UnsuccessfulResponse(s"${response.code} ${response.statusText}: $body")
-      case SttpDeserializationError(original, error) =>
-        DeserializationError(s"${error.toString} - Response body: $original")
-    }
+    def handleError(response: Response[_])(error: ResponseError[_]) =
+      error match {
+        case HttpError(body)                           =>
+          UnsuccessfulResponse(s"${response.code} ${response.statusText}: $body")
+        case SttpDeserializationError(original, error) =>
+          DeserializationError(s"${error.toString} - Response body: $original")
+      }
 
     basicRequest
       .post(uri"${constants.Url.DATOS_AGROINDUSTRIA_GOB_AR}")

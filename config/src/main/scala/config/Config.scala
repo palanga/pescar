@@ -9,7 +9,7 @@ case class DBConfig(
   url: URL,
   username: Username,
   password: Password,
-  connectionThreadPoolSize: ThreadPoolSize
+  connectionThreadPoolSize: ThreadPoolSize,
 )
 
 case class ServerConfig(host: Hostname, port: PortNumber)
@@ -23,12 +23,12 @@ object Config {
         "jdbc:postgresql://postgres:5432/test_datos_gob",
         "palan",
         "",
-        32
+        32,
       ),
       ServerConfig(
         "",
-        0
-      )
+        0,
+      ),
     )
 
 }

@@ -23,21 +23,20 @@ object Dummy extends LandingsDatabase.Service {
     import analytics.consumer.gob.datos.types.{ Landing => ConsumerLanding }
     import config.Config
 
-    def toApiLanding(landing: ConsumerLanding): Landing = landing match {
-      case ConsumerLanding(fecha, flota, puerto, _, _, _, _, lat, lon, _, especie, _, captura) =>
-        val location = (lat zip lon).fold[Location](Miscellaneous(puerto))(
-          geoLocation => Harbour(puerto, GeoLocation.fromFloatPairUnsafe(geoLocation))
-        )
-        Landing(fecha, location, Specie(especie), Fleet(flota), captura)
-    }
+    def toApiLanding(landing: ConsumerLanding): Landing =
+      landing match {
+        case ConsumerLanding(fecha, flota, puerto, _, _, _, _, lat, lon, _, especie, _, captura) =>
+          val location = (lat zip lon).fold[Location](Miscellaneous(puerto))(geoLocation =>
+            Harbour(puerto, GeoLocation.fromFloatPairUnsafe(geoLocation))
+          )
+          Landing(fecha, location, Specie(especie), Fleet(flota), captura)
+      }
 
     // TODO
-    db
-      .find(filter.dates)
+    db.find(filter.dates)
       .map(toApiLanding)
-      .filter(
-        landing =>
-          (filter.locations contains landing.location.name) &&
+      .filter(landing =>
+        (filter.locations contains landing.location.name) &&
           (filter.species contains landing.specie.name) &&
           (filter.fleets contains landing.fleet.name)
       )

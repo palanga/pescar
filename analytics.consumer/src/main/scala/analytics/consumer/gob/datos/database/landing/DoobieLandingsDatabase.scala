@@ -31,7 +31,7 @@ object DoobieLandingsDatabase {
             config.username,
             config.password,
             runtime.platform.executor.asEC,
-            Blocker.liftExecutionContext(runtime.environment.get.blockingExecutor.asEC)
+            Blocker.liftExecutionContext(runtime.environment.get.blockingExecutor.asEC),
           )
           .toManaged
       }

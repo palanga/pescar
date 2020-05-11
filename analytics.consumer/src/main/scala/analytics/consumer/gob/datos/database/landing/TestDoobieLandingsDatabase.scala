@@ -20,7 +20,7 @@ object TestDoobieLandingsDatabase {
           "palan",
           "",
           runtime.platform.executor.asEC,
-          Blocker.liftExecutionContext(runtime.environment.get.blockingExecutor.asEC)
+          Blocker.liftExecutionContext(runtime.environment.get.blockingExecutor.asEC),
         )
         .toManaged
         .map { transactor =>

@@ -18,7 +18,7 @@ object types {
     ) extends Metric
 
     final case class LandingsSummary(
-      total: Int,
+      total: Int
     ) extends Metric
 
   }

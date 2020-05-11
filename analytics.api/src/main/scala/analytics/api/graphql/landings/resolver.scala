@@ -35,8 +35,8 @@ object resolver {
       byFleet = UIO effectTotal byKey(filter, _.fleets, _ withFleets _),
     )
 
-  private def byKey[K](filter: Filter, getKey: Filter => Set[K], updateFilter: (Filter, Set[K]) => Filter)(
-    implicit ord: Ordering[K]
+  private def byKey[K](filter: Filter, getKey: Filter => Set[K], updateFilter: (Filter, Set[K]) => Filter)(implicit
+    ord: Ordering[K]
   ) =
     getKey(filter).toList match {
       case Nil  => Map.empty[K, Node]

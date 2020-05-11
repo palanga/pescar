@@ -33,7 +33,7 @@ object DatabaseTest extends DefaultRunnableSpec {
               "Peces",
               "Merluza hubbsi",
               "Merluza hubbsi S41",
-              386114
+              386114,
             ),
           types
             .Landing(
@@ -49,7 +49,7 @@ object DatabaseTest extends DefaultRunnableSpec {
               "Peces",
               "Pez gallo",
               "otras especies",
-              4367
+              4367,
             ),
           types
             .Landing(
@@ -65,8 +65,8 @@ object DatabaseTest extends DefaultRunnableSpec {
               "Peces",
               "Rayas nep",
               "Rayas (sin V. Cost)",
-              13
-            )
+              13,
+            ),
         )
 
         // TODO ?

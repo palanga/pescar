@@ -8,12 +8,13 @@ object GeoLocation {
 
   val zero: GeoLocation = GeoLocation(Latitude(0), Longitude(0))
 
-  def fromPair(pair: (Latitude, Longitude)): GeoLocation = pair match {
-    case (latitude, longitude) => GeoLocation(latitude, longitude)
-  }
+  def fromPair(pair: (Latitude, Longitude)): GeoLocation =
+    pair match {
+      case (latitude, longitude) => GeoLocation(latitude, longitude)
+    }
 
   def fromFloat(latitude: Float, longitude: Float): Either[IllegalArgumentException, GeoLocation] =
-    (Latitude from latitude zipWithError (Longitude from longitude)) (_ + _)
+    (Latitude from latitude zipWithError (Longitude from longitude))(_ + _)
       .map(fromPair)
 
   def fromFloatUnsafe(latitude: Float, longitude: Float): GeoLocation =
@@ -34,7 +35,7 @@ case class GeoLocation(latitude: GeoDegree.Latitude, longitude: GeoDegree.Longit
 sealed trait GeoDegree extends Any with Product with Serializable
 object GeoDegree {
 
-  case class Latitude(value: Float) extends AnyVal with GeoDegree
+  case class Latitude(value: Float)  extends AnyVal with GeoDegree
   case class Longitude(value: Float) extends AnyVal with GeoDegree
 
   private val LATITUDE_MIN  = -90

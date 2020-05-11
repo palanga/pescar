@@ -57,15 +57,14 @@ object types {
           month <- 1 to 12
         } yield YearMonth.of(year, month)
 
-      if (from == until || from.isAfter(until)) {
+      if (from == until || from.isAfter(until))
         Set.empty
-      } else if (fromYear == untilYear) {
+      else if (fromYear == untilYear)
         (fromMonth until untilMonth).map(month => YearMonth.of(fromYear, month)).toSet
-      } else if (fromYear + 1 == untilYear) {
+      else if (fromYear + 1 == untilYear)
         firstYearTruncated.toSet ++ lastYearTruncated.toSet
-      } else {
+      else
         firstYearTruncated.toSet ++ yearsBetween.toSet ++ lastYearTruncated.toSet
-      }
 
     }
   }

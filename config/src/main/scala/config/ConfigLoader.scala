@@ -9,7 +9,7 @@ object ConfigLoader {
 
   val loadYamlConfig =
     property("user.dir").someOrFailException
-      .flatMap(file.open _ compose (_ ++ "/consumer/conf.yaml"))// TODO
+      .flatMap(file.open _ compose (_ ++ "/consumer/conf.yaml")) // TODO
       .flatMap(loadYamlFromString)
 
   private final def loadYamlFromString(file: String) = {

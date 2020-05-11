@@ -20,24 +20,23 @@ object LoadTest extends DefaultRunnableSpec {
         val TIMES = 10
 
         loadDataFromCsv
-          .map(
-            landings =>
-              landings.take(1) :: // warm up
-                landings.take(1) ::
-                landings.take(10) ::
-                landings.take(100) ::
-                landings.take(1000) ::
-                landings.take(10000) ::
-                landings.take(2) ::
-                landings.take(20) ::
-                landings.take(200) ::
-                landings.take(2000) ::
-                landings.take(20000) ::
-                landings.take(4) ::
-                landings.take(40) ::
-                landings.take(400) ::
-                landings.take(4000) ::
-                landings.take(40000) ::
+          .map(landings =>
+            landings.take(1) :: // warm up
+              landings.take(1) ::
+              landings.take(10) ::
+              landings.take(100) ::
+              landings.take(1000) ::
+              landings.take(10000) ::
+              landings.take(2) ::
+              landings.take(20) ::
+              landings.take(200) ::
+              landings.take(2000) ::
+              landings.take(20000) ::
+              landings.take(4) ::
+              landings.take(40) ::
+              landings.take(400) ::
+              landings.take(4000) ::
+              landings.take(40000) ::
               Nil
           )
           .flatMap { landingsList =>

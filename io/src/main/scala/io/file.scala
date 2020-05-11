@@ -32,31 +32,31 @@ object file {
 
   private def asString(channel: AsynchronousFileChannel) =
     for {
-      size <- channel.size
+      size      <- channel.size
       wholeFile <- if (size > Int.MaxValue.toLong)
-                    ZIO.fail(new IOException(s"File too large: $size bytes"))
-                  else channel.read(size.toInt, 0L)
-      decoded <- Stream(wholeFile) // Create a stream just to use Sink.utf8DecodeChunk and Sink.splitLines
-                  .aggregate(Sink.utf8DecodeChunk)
-                  .runHead
-                  .map(_.getOrElse(""))
+                     ZIO.fail(new IOException(s"File too large: $size bytes"))
+                   else channel.read(size.toInt, 0L)
+      decoded   <- Stream(wholeFile) // Create a stream just to use Sink.utf8DecodeChunk and Sink.splitLines
+                   .aggregate(Sink.utf8DecodeChunk)
+                   .runHead
+                   .map(_.getOrElse(""))
     } yield decoded
 
   private def asStringList(channel: AsynchronousFileChannel) =
     for {
-      size <- channel.size
+      size      <- channel.size
       wholeFile <- if (size > Int.MaxValue.toLong)
-                    ZIO.fail(new IOException(s"File too large: $size bytes"))
-                  else channel.read(size.toInt, 0L)
-      decoded <- Stream(wholeFile) // Create a stream just to use Sink.utf8DecodeChunk and Sink.splitLines
-                  .aggregate(Sink.utf8DecodeChunk)
-                  .aggregate(Sink.splitLines)
-                  .flatMap(Stream fromChunk _)
-                  .runCollect
+                     ZIO.fail(new IOException(s"File too large: $size bytes"))
+                   else channel.read(size.toInt, 0L)
+      decoded   <- Stream(wholeFile) // Create a stream just to use Sink.utf8DecodeChunk and Sink.splitLines
+                   .aggregate(Sink.utf8DecodeChunk)
+                   .aggregate(Sink.splitLines)
+                   .flatMap(Stream fromChunk _)
+                   .runCollect
     } yield decoded
 
-  private val OneMegaByte  = 1024 * 1024
-  private val OneMegaByteL = OneMegaByte.toLong
+  private val OneMegaByte                                      = 1024 * 1024
+  private val OneMegaByteL                                     = OneMegaByte.toLong
   private def asStringStream(channel: AsynchronousFileChannel) =
     Stream
       .iterate(0L)(_ + OneMegaByteL)

@@ -22,11 +22,11 @@ object TestApi extends DefaultRunnableSpec {
     for {
       interpreter             <- memoizedInterpreter
       userDir                 <- system.property("user.dir").someOrFailException.provideLayer(System.live)
-      path                    = userDir ++ "/src/test/scala/analytics/api/cases"
-      pathFromIntelliJ        = userDir ++ "/analytics.api/src/test/scala/analytics/api/cases"
-      fileName                = name replace (' ', '_')
-      query                   = open(s"$path/$fileName.graphql") race open(s"$pathFromIntelliJ/$fileName.graphql")
-      expected                = open(s"$path/$fileName.json") race open(s"$pathFromIntelliJ/$fileName.json")
+      path                     = userDir ++ "/src/test/scala/analytics/api/cases"
+      pathFromIntelliJ         = userDir ++ "/analytics.api/src/test/scala/analytics/api/cases"
+      fileName                 = name replace (' ', '_')
+      query                    = open(s"$path/$fileName.graphql") race open(s"$pathFromIntelliJ/$fileName.graphql")
+      expected                 = open(s"$path/$fileName.json") race open(s"$pathFromIntelliJ/$fileName.json")
       (gqlResponse, expected) <- (query >>= (interpreter.execute(_))) zipPar (expected >>= parse)
     } yield assert(gqlResponse.asJson)(equalTo(expected))
 

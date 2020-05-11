@@ -36,14 +36,14 @@ private final class Http4sClient(httpClientBackend: Client[BlockingIO]) extends 
     // This "succeeded error" will be mapped to the zio's error channel. That's the way http4s works 🤷🏻‍
     def handleError(response: Response[BlockingIO]) =
       for {
-        body   <- response.bodyAsText.compile.string
+        body  <- response.bodyAsText.compile.string
         status = response.status
       } yield UnsuccessfulResponse(s"$status: $body")
 
     for {
-      uri           <- ZIO.fromEither(org.http4s.Uri.fromString(request.uri))
+      uri          <- ZIO.fromEither(org.http4s.Uri.fromString(request.uri))
       http4sRequest = Http4sRequest[BlockingIO](Method.POST, uri).withEntity(request.body)
-      response      <- httpClientBackend.expectOr[ResponseBody](http4sRequest)(handleError)
+      response     <- httpClientBackend.expectOr[ResponseBody](http4sRequest)(handleError)
     } yield response
 
   }

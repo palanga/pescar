@@ -19,8 +19,7 @@ object query {
 
   private val LandingsDataSource: DataSource[AppEnv, LandingsFromFilterRequest] =
     DataSource("LandingDataSource") { requests =>
-      db
-        .landingsFromFilter(requests.map(_.filter).reduce(_ union _))
+      db.landingsFromFilter(requests.map(_.filter).reduce(_ union _))
         .runCollect
         .map(makeResultMap(requests))
         .catchAll(makeErrorMap(requests)) // TODO
@@ -47,12 +46,11 @@ object query {
         location <- filter.locations
         specie   <- filter.species
         fleet    <- filter.fleets
-      } yield
-        grouped
-          .get(date)
-          .flatMap(_.get(location))
-          .flatMap(_.get(specie))
-          .flatMap(_.get(fleet))
+      } yield grouped
+        .get(date)
+        .flatMap(_.get(location))
+        .flatMap(_.get(specie))
+        .flatMap(_.get(fleet))
 
     // TODO move and make better
     def landingComparator(a: Landing, b: Landing): Boolean = {
@@ -78,12 +76,10 @@ object query {
 
     }
 
-    requests.foldLeft(CompletedRequestMap.empty)(
-      (resultMap, req) => {
-        val result = findResult(req.filter) collect { case Some(landing) => landing }
-        resultMap.insert(req)(Right(result.toList sortWith landingComparator))
-      }
-    )
+    requests.foldLeft(CompletedRequestMap.empty) { (resultMap, req) =>
+      val result = findResult(req.filter) collect { case Some(landing) => landing }
+      resultMap.insert(req)(Right(result.toList sortWith landingComparator))
+    }
 
   }
 
@@ -97,7 +93,7 @@ object query {
         self.dates ++ other.dates,
         self.locations ++ other.locations,
         self.species ++ other.species,
-        self.fleets ++ other.fleets
+        self.fleets ++ other.fleets,
       )
   }
 

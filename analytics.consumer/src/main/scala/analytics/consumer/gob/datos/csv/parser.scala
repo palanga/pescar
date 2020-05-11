@@ -18,24 +18,27 @@ object parser {
    */
   private def fixIfNecessary(split: Array[String]) =
     if ((split.length > 11) && (split(11) != " etc.")) split
-    else split.updated(10, split(10) + ", etc.").splitAt(11) match { case (left, right) => left ++ right.drop(1) }
+    else
+      split.updated(10, split(10) + ", etc.").splitAt(11) match {
+        case (left, right) => left ++ right.drop(1)
+      }
 
   private def parse(split: Array[String]) =
     split.toList match {
       case AsYearMonth(fecha)
-            :: flota
-            :: puerto
-            :: provincia
-            :: AsInt(provincia_id)
-            :: departamento
-            :: AsInt(departamento_id)
-            :: latitud
-            :: longitud
-            :: categoria
-            :: especie
-            :: especie_agrupada
-            :: AsInt(captura)
-            :: Nil =>
+          :: flota
+          :: puerto
+          :: provincia
+          :: AsInt(provincia_id)
+          :: departamento
+          :: AsInt(departamento_id)
+          :: latitud
+          :: longitud
+          :: categoria
+          :: especie
+          :: especie_agrupada
+          :: AsInt(captura)
+          :: Nil =>
         Right(
           Landing(
             fecha,
@@ -73,20 +76,21 @@ object parser {
 
     import time.syntax.StringOps
 
-    def from(csvLine: List[String]): LineParseError = csvLine match {
-      case fecha :: _ :: _ :: _ :: provId :: _ :: depId :: _ :: _ :: _ :: _ :: _ :: cap :: Nil =>
-        val columns =
-          List(1 -> fecha, 5 -> provId, 7 -> depId, 13 -> cap) // zip with column number
-          .map { // try parse
-            case (1, value)   => (1, value.toYearMonthOption.toRight(value))
-            case (col, value) => (col, value.toIntOption.toRight(value))
-          }.collect { case (col, Left(value)) => (col, value) } // keep failed only
-          .map { case (col, value) => s"""column $col "$value"""" }
-            .mkString(", ")
-        LineParseError("Couldn't parse " + columns)
-      case _ =>
-        LineParseError(s"""Couldn't parse "${csvLine.mkString(",")}"""")
-    }
+    def from(csvLine: List[String]): LineParseError =
+      csvLine match {
+        case fecha :: _ :: _ :: _ :: provId :: _ :: depId :: _ :: _ :: _ :: _ :: _ :: cap :: Nil =>
+          val columns =
+            List(1 -> fecha, 5 -> provId, 7 -> depId, 13 -> cap) // zip with column number
+            .map { // try parse
+              case (1, value)   => (1, value.toYearMonthOption.toRight(value))
+              case (col, value) => (col, value.toIntOption.toRight(value))
+            }.collect { case (col, Left(value)) => (col, value) } // keep failed only
+            .map { case (col, value) => s"""column $col "$value"""" }
+              .mkString(", ")
+          LineParseError("Couldn't parse " + columns)
+        case _                                                                                   =>
+          LineParseError(s"""Couldn't parse "${csvLine.mkString(",")}"""")
+      }
 
   }
 
