@@ -5,9 +5,7 @@ import java.time.YearMonth
 import analytics.api.Main.AppEnv
 import analytics.api.types.Metric.{ Landing, LandingsSummary }
 import analytics.api.types.{ FleetName, LocationName, SpecieName }
-import analytics.consumer.gob.datos.database.landing.module.LandingsDatabase
 import zio.UIO
-import zio.blocking.Blocking
 import zquery.ZQuery
 
 object types {
