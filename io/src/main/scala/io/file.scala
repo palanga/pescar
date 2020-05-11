@@ -1,36 +1,41 @@
 package io
 
 import java.io.IOException
+import java.nio.file.{ OpenOption, StandardOpenOption }
 
-import zio.ZIO
 import zio.nio.channels.AsynchronousFileChannel
 import zio.nio.core.file.Path
 import zio.stream.{ Sink, Stream }
+import zio.{ Chunk, ZIO }
 
 object file {
 
   /**
    * Open a whole file as a String
    */
-  def open(path: String) = openAsyncChannel(path).use(asString)
+  def open(path: String) = openAsyncChannel(path).use(decodeAsString)
 
   /**
    * List file lines
    */
-  def list(path: String) = openAsyncChannel(path).use(asStringList)
+  def list(path: String) = openAsyncChannel(path).use(decodeAsStringList)
 
   /**
    * Stream file lines
    */
-  def stream(path: String) = Stream.unwrapManaged(openAsyncChannel(path).map(asStringStream))
+  def stream(path: String) = Stream.unwrapManaged(openAsyncChannel(path).map(decodeAsStringStream))
 
-  private def openAsyncChannel(uri: String) =
+  def write(path: String, content: String) =
+    openAsyncChannel(path, StandardOpenOption.WRITE)
+      .use(_.write(Chunk.fromArray(content.toArray.map(_.toByte)), 0L))
+
+  private def openAsyncChannel(uri: String, options: OpenOption*) =
     for {
       path    <- ZIO.effect(Path(uri)).toManaged_
-      channel <- AsynchronousFileChannel.open(path)
+      channel <- AsynchronousFileChannel.open(path, options: _*)
     } yield channel
 
-  private def asString(channel: AsynchronousFileChannel) =
+  private def decodeAsString(channel: AsynchronousFileChannel) =
     for {
       size      <- channel.size
       wholeFile <- if (size > Int.MaxValue.toLong)
@@ -42,7 +47,7 @@ object file {
                    .map(_.getOrElse(""))
     } yield decoded
 
-  private def asStringList(channel: AsynchronousFileChannel) =
+  private def decodeAsStringList(channel: AsynchronousFileChannel) =
     for {
       size      <- channel.size
       wholeFile <- if (size > Int.MaxValue.toLong)
@@ -55,9 +60,9 @@ object file {
                    .runCollect
     } yield decoded
 
-  private val OneMegaByte                                      = 1024 * 1024
-  private val OneMegaByteL                                     = OneMegaByte.toLong
-  private def asStringStream(channel: AsynchronousFileChannel) =
+  private val OneMegaByte                                            = 1024 * 1024
+  private val OneMegaByteL                                           = OneMegaByte.toLong
+  private def decodeAsStringStream(channel: AsynchronousFileChannel) =
     Stream
       .iterate(0L)(_ + OneMegaByteL)
       .mapM(channel.read(OneMegaByte, _))
