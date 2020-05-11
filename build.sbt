@@ -8,6 +8,7 @@ lazy val root =
       analyticsConsumer,
       config,
       io,
+      reader,
       time,
       utilsStd,
       utilsZio,
@@ -31,7 +32,6 @@ lazy val analyticsApi =
       time,
       utilsStd,
       utilsZio,
-      analyticsConsumer,// TODO remove
     )
 
 lazy val analyticsConsumer =
@@ -42,8 +42,10 @@ lazy val analyticsConsumer =
     .settings(fork in Test := true)
     .settings(libraryDependencies := Dependencies.analyticsConsumer.toSeq)
     .dependsOn(
+      analyticsApi, // TODO remove
       config,
       io,
+      reader,
       time,
       utilsStd,
       utilsZio,
@@ -63,6 +65,11 @@ lazy val io =
     .settings(name := "io")
     .settings(commonSettings)
     .settings(libraryDependencies := Dependencies.io.toSeq)
+
+lazy val reader =
+  (project in file("reader"))
+    .settings(name := "reader")
+    .settings(commonSettings)
 
 lazy val time =
   (project in file("time"))

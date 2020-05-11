@@ -1,10 +1,18 @@
 package analytics.consumer.gob.datos
 
+import analytics.api.types.Location.{ Harbour, Miscellaneous }
+import analytics.api.types.Metric.{ Landing => ApiLanding }
+import analytics.api.types.{ Fleet, Location, Specie }
+import analytics.consumer.gob.datos.constants.Path.{ CAPTURA_PUERTO_FLOTA_2010_2018, CAPTURA_PUERTO_FLOTA_2019 }
+import analytics.consumer.gob.datos.csv.parser
 import analytics.consumer.gob.datos.csv.parser.LineParseError
 import analytics.consumer.gob.datos.database.landing.{ module => db }
 import analytics.consumer.gob.datos.http.client.types.Request
 import analytics.consumer.gob.datos.http.client.{ module => httpClient }
+import analytics.consumer.gob.datos.types.Landing
 import config.Config
+import reader.csv.{ parse, Indexed }
+import utils.GeoLocation
 import zio.stream.ZStream
 import zio.{ App, ZEnv, ZIO }
 
@@ -15,20 +23,39 @@ object Main extends App {
    */
   override def run(args: List[String]): ZIO[ZEnv, Nothing, Int] = {
 
+    import io.circe.generic.auto._
+    import io.circe.syntax._
     import utils.zio.syntax.zioops._
 
-    (loadDataFromCsv zipPar loadDataFromApi())
-      .map { case (csvData, apiData) => csvData ++ apiData }
-      .flatMap(db.saveMany)
+    (loadDataFromCsv(CAPTURA_PUERTO_FLOTA_2010_2018) zipPar loadDataFromCsv(CAPTURA_PUERTO_FLOTA_2019)).map {
+      case (csvData, apiData) => csvData ++ apiData
+    }
+    //      .flatMap(db.saveMany)
       .tapPrint(saved => s"Saved ${saved.size} landings")
+      .map(_.map(toApiLanding))
+      .flatMap(landings =>
+        io.file.write(
+          "/Users/palan/code/pescar/analytics.api/src/main/resources/landings-2010-2019-utf8.json",
+          landings.map(_.asJson.noSpaces).mkString("[\n", ",\n", "]\n"),
+        )
+      )
       .tapPrintTimed("Total time: ")
       .as(ExitStatus.Success)
-      .provideSomeLayer[ZEnv](dependencies)
+      //      .provideSomeLayer[ZEnv](dependencies)
       .orDie
 
   }
 
   val dependencies = db.doobie(Config.test.db) ++ httpClient.sttp
+
+  def toApiLanding(landing: Landing): ApiLanding =
+    landing match {
+      case Landing(fecha, flota, puerto, _, _, _, _, lat, lon, _, especie, _, captura) =>
+        val location = (lat zip lon).fold[Location](Miscellaneous(puerto))(geoLocation =>
+          Harbour(puerto, GeoLocation.fromFloatPairUnsafe(geoLocation))
+        )
+        ApiLanding(fecha, location, Specie(especie), Fleet(flota), captura)
+    }
 
   /**
    * Read the whole file, parse it and collect to a either a list of success or a list of parse failures.
@@ -39,28 +66,12 @@ object Main extends App {
    *
    * Consider using a Stream based solution if the file is too long.
    */
-  val loadDataFromCsv = {
-
-    def parse(unparsedCsvLines: List[String]) =
-      unparsedCsvLines
-        .map(csv.parser.parseLine)
-        .zipWithIndex
-        .partitionMap { case (either, index) => either.left.map(Indexed(index + 1, _)) } match {
-        case (Nil, landings) => Right(landings)
-        case (failures, _)   => Left(failures)
-      }
-
+  def loadDataFromCsv(path: String) =
     io.file
-      .list(constants.Path.CAPTURA_PUERTO_FLOTA_2010_2018)
+      .list(path)
       .map(_.drop(1)) // Drop the header
-      .map(parse)
+      .map(lines => parse(lines, parser.parseLine))
       .flatMap(ZIO.fromEither(_).mapError(ParseFailure))
-
-  }
-
-  case class Indexed[A](index: Int, value: A) {
-    override def toString: String = s"$index: $value"
-  }
 
   case class ParseFailure(errors: Iterable[Indexed[LineParseError]])
       extends Exception("On lines:\n" ++ errors.mkString("\n"))

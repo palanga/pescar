@@ -1,6 +1,7 @@
 package analytics.consumer.gob.datos
 
 import analytics.consumer.gob.datos.Main.loadDataFromCsv
+import analytics.consumer.gob.datos.constants.Path.CAPTURA_PUERTO_FLOTA_2019
 import analytics.consumer.gob.datos.database.landing.{ TestDoobieLandingsDatabase, module => db }
 import config.Config
 import utils.zio.syntax
@@ -19,7 +20,7 @@ object LoadTest extends DefaultRunnableSpec {
 
         val TIMES = 10
 
-        loadDataFromCsv
+        loadDataFromCsv(CAPTURA_PUERTO_FLOTA_2019)
           .map(landings =>
             landings.take(1) :: // warm up
               landings.take(1) ::
