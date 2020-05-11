@@ -103,5 +103,5 @@ object Versions {
   val sttp           = "2.0.6"
   val zio            = "1.0.0-RC18-2"
   val zioInteropCats = "2.0.0.0-RC12"
-  val zioNio         = "1.0.0-RC5"
+  val zioNio         = "1.0.0-RC6"
 }
