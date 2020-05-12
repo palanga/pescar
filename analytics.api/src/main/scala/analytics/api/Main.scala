@@ -20,7 +20,7 @@ object Main extends CatsApp {
   val api     = schema.make
   val httpApp =
     api.interpreter
-      .map(_.provideSomeLayer[ZEnv](db.test))
+      .map(_.provideSomeLayer[ZEnv](db.dummy.orDie))
       .map(routes.withInterpreter)
 
   private val startServer = {

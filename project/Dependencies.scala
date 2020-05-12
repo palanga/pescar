@@ -15,8 +15,9 @@ object Dependencies {
   val analyticsApi = common ++ Set(
     caliban,
     calibanHttp4s,
-    circeCore   % Test,
-    circeParser % Test,
+    circeCore,
+    circeGeneric,
+    circeParser,
   )
 
   val config = Set(

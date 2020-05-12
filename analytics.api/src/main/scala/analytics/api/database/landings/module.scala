@@ -4,7 +4,7 @@ import analytics.api.types.{ Filter, Metric }
 import doobie.util.transactor.Transactor
 import zio.blocking.Blocking
 import zio.stream.ZStream
-import zio.{ Has, RIO, ZIO, ZLayer }
+import zio.{ Has, RIO, ZIO }
 
 object module {
 
@@ -25,7 +25,7 @@ object module {
   def landingsSummaryFromFilter(filter: Filter): ZIO[LandingsDatabase with Blocking, Throwable, Int] =
     ZIO.accessM(_.get.landingsSummaryFromFilter(filter))
 
-  val dummy: ZLayer[Any, Nothing, LandingsDatabase] = ZLayer fromFunction ((_: Any) => Dummy)
-  val test: ZLayer[Any, Nothing, LandingsDatabase]  = ZLayer fromFunction ((_: Any) => Test)
+  val dummy = Dummy.make
+  val test  = Test.make
 
 }

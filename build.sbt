@@ -28,7 +28,7 @@ lazy val analyticsApi =
     .settings(fork in Test := true)
     .settings(libraryDependencies := Dependencies.analyticsApi.toSeq)
     .dependsOn(
-      io % Test,
+      io,
       time,
       utilsStd,
       utilsZio,

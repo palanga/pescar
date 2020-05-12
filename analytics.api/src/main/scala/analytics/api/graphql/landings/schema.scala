@@ -11,7 +11,6 @@ import caliban.GraphQL.graphQL
 import caliban.schema.{ ArgBuilder, GenericSchema, Schema }
 import caliban.{ CalibanError, GraphQL, RootResolver }
 import utils.GeoDegree.{ Latitude, Longitude }
-import zio.blocking.Blocking
 
 object schema extends GenericSchema[AppEnv] {
 
