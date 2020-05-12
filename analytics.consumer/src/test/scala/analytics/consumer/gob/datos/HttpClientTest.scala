@@ -15,6 +15,6 @@ object HttpClientTest extends DefaultRunnableSpec {
     suite("analytics http client datos.gob")(
       testM("sttp works")(test).provideSomeLayer[TestEnvironment](sttpClient),
       testM("http4s works")(test).provideSomeLayer[TestEnvironment](http4sClient),
-    )
+    ) @@ TestAspect.ignore
 
 }
