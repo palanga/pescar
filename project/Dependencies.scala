@@ -95,7 +95,7 @@ object Definitions {
 }
 
 object Versions {
-  val caliban        = "0.7.4"
+  val caliban        = "0.7.8"
   val circe          = "0.13.0"
   val doobie         = "0.8.6"
   val http4s         = "0.21.1"
