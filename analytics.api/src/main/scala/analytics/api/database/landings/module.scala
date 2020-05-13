@@ -25,7 +25,7 @@ object module {
   def landingsSummaryFromFilter(filter: Filter): ZIO[LandingsDatabase with Blocking, Throwable, Int] =
     ZIO.accessM(_.get.landingsSummaryFromFilter(filter))
 
-  val dummy = Dummy.make
-  val test  = Test.make
+  val inMemory = InMemory.make
+  val test     = Test.make
 
 }

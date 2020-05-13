@@ -8,7 +8,7 @@ import zio.blocking.Blocking
 import zio.stream.ZStream
 import zio.{ ZIO, ZLayer }
 
-object Dummy {
+object InMemory {
 
   private val loadDataFromJson = {
 
@@ -23,11 +23,11 @@ object Dummy {
   }
 
   val make: ZLayer[Blocking, Throwable, LandingsDatabase] =
-    ZLayer fromEffect loadDataFromJson.map(landings => new Dummy(landings))
+    ZLayer fromEffect loadDataFromJson.map(landings => new InMemory(landings))
 
 }
 
-private final class Dummy(landings: List[Landing]) extends LandingsDatabase.Service {
+private final class InMemory(landings: List[Landing]) extends LandingsDatabase.Service {
 
   override def landingsFromFilter(filter: Filter): ZStream[Blocking, Throwable, Landing] =
     ZStream fromIterable landings.filter(landing =>
