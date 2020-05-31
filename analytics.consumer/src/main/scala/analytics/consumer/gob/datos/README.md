@@ -7,8 +7,6 @@ Consume landings data from datos.gob.ar and store them raw in our database.
  =============
  
  - java 8
- - sbt 1.2.8
- - scala 2.13.1
  - Docker Desktop 2.1.7.0
  
  
@@ -30,7 +28,7 @@ Consume landings data from datos.gob.ar and store them raw in our database.
  then:
  
  ```bash
- sbt
+./sbt
  ```
  
  and once inside the `sbt` shell:

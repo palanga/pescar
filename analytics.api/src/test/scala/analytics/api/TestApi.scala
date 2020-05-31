@@ -1,12 +1,12 @@
 package analytics.api
 
-import analytics.api.Main.api
+import analytics.api.Main.{ api, AppEnv }
 import analytics.api.database.landings.{ module => db }
 import io.circe.parser.{ parse => circeParse }
 import io.file.open
 import zio.system.System
 import zio.test.Assertion.equalTo
-import zio.test.{ assert, suite, testM, DefaultRunnableSpec }
+import zio.test.{ assert, suite, testM, DefaultRunnableSpec, TestResult }
 import zio.{ system, ZEnv, ZIO }
 
 object TestApi extends DefaultRunnableSpec {
@@ -15,7 +15,7 @@ object TestApi extends DefaultRunnableSpec {
   private val memoizedInterpreter = api.interpreter.memoize.flatten
 
   // TODO convert to string in order to benefit from string diffing in next ZIO release
-  private def runTestCase(name: String) = {
+  private def runTestCase(name: String): ZIO[AppEnv, Throwable, TestResult] = {
 
     import io.circe.syntax._
 

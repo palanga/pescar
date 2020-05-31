@@ -2,7 +2,7 @@ package analytics.consumer.gob.datos
 
 import java.time.YearMonth
 
-import analytics.consumer.gob.datos.database.landing.{TestDoobieLandingsDatabase, module => db}
+import analytics.consumer.gob.datos.database.landing.{ TestDoobieLandingsDatabase, module => db }
 import config.Config
 import zio.ZIO
 import zio.test.Assertion.equalTo

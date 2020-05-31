@@ -1,3 +1,4 @@
+import sbt.compilerPlugin
 import sbt.librarymanagement.syntax.{ stringToOrganization, Test }
 
 object Dependencies {
@@ -10,6 +11,7 @@ object Dependencies {
     zioStreams,
     zioTest,
     zioTestSbt,
+    compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1"),
   )
 
   val analyticsApi = common ++ Set(
@@ -54,6 +56,11 @@ object Dependencies {
     zioStreams,
   )
 
+  val utilsZioTest = Set(
+    zio,
+    "dev.zio" %% "zio-test" % Versions.zio,
+  )
+
 }
 
 object Definitions {
@@ -72,6 +79,7 @@ object Definitions {
   val http4sClient = "org.http4s" %% "http4s-blaze-client" % Versions.http4s
   val http4sCirce  = "org.http4s" %% "http4s-circe"        % Versions.http4s
   val http4sDsl    = "org.http4s" %% "http4s-dsl"          % Versions.http4s
+  val http4sServer = "org.http4s" %% "http4s-blaze-server" % Versions.http4s // TODO remove
 
   val logbackClassic = "ch.qos.logback" % "logback-classic" % Versions.logback
 
@@ -103,6 +111,6 @@ object Versions {
   val pureconfig     = "0.12.2"
   val sttp           = "2.0.6"
   val zio            = "1.0.0-RC18-2"
-  val zioInteropCats = "2.0.0.0-RC12"
+  val zioInteropCats = "2.0.0.0-RC13"
   val zioNio         = "1.0.0-RC6"
 }

@@ -12,6 +12,7 @@ lazy val root =
       time,
       utilsStd,
       utilsZio,
+      utilsZioTest,
     )
 
 val commonSettings =
@@ -26,7 +27,7 @@ lazy val analyticsApi =
     .settings(commonSettings)
     .settings(testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")))
     .settings(fork in Test := true)
-    .settings(libraryDependencies := Dependencies.analyticsApi.toSeq)
+    .settings(libraryDependencies ++= Dependencies.analyticsApi.toSeq)
     .dependsOn(
       io,
       time,
@@ -40,7 +41,7 @@ lazy val analyticsConsumer =
     .settings(commonSettings)
     .settings(testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework")))
     .settings(fork in Test := true)
-    .settings(libraryDependencies := Dependencies.analyticsConsumer.toSeq)
+    .settings(libraryDependencies ++= Dependencies.analyticsConsumer.toSeq)
     .dependsOn(
       analyticsApi, // TODO remove
       config,
@@ -55,7 +56,7 @@ lazy val config =
   (project in file("config"))
     .settings(name := "config")
     .settings(commonSettings)
-    .settings(libraryDependencies := Dependencies.config.toSeq)
+    .settings(libraryDependencies ++= Dependencies.config.toSeq)
     .dependsOn(
       io,
     )
@@ -64,7 +65,7 @@ lazy val io =
   (project in file("io"))
     .settings(name := "io")
     .settings(commonSettings)
-    .settings(libraryDependencies := Dependencies.io.toSeq)
+    .settings(libraryDependencies ++= Dependencies.io.toSeq)
 
 lazy val reader =
   (project in file("reader"))
@@ -85,6 +86,12 @@ lazy val utilsZio =
   (project in file("utils.zio"))
     .settings(name := "utils.zio")
     .settings(commonSettings)
-    .settings(libraryDependencies := Dependencies.utilsZio.toSeq)
+    .settings(libraryDependencies ++= Dependencies.utilsZio.toSeq)
+
+lazy val utilsZioTest =
+  (project in file("utils.zio.test"))
+    .settings(name := "utils.zio.test")
+    .settings(commonSettings)
+    .settings(libraryDependencies ++= Dependencies.utilsZioTest.toSeq)
 
 //Revolver.settings
