@@ -8,6 +8,7 @@ lazy val root =
       analyticsConsumer,
       config,
       io,
+      marketplace,
       reader,
       time,
       utilsStd,
@@ -66,6 +67,11 @@ lazy val io =
     .settings(name := "io")
     .settings(commonSettings)
     .settings(libraryDependencies ++= Dependencies.io.toSeq)
+
+lazy val marketplace =
+  (project in file("marketplace"))
+    .settings(name := "marketplace")
+    .settings(commonSettings)
 
 lazy val reader =
   (project in file("reader"))
