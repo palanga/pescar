@@ -19,7 +19,7 @@ lazy val root =
 val commonSettings =
   Def.settings(
     scalacOptions := ScalaOptions.dev,
-    scalaVersion := "2.13.1",
+    scalaVersion := "2.13.2",
   )
 
 lazy val analyticsApi =
